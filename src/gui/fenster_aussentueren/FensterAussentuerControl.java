@@ -44,8 +44,7 @@ public final class FensterAussentuerControl {
      */
     public boolean pruefeKonstellationSonderwuensche(int[] ausgewaehlteSw){
         boolean hatDachgeschoss = kundeModel.hatDachgeschoss();
-        // Track selected wishes
-        boolean wunschEins = false;  // 3.1
+
         boolean wunschZwei = false;        // 3.2
         boolean wunschVier = false;      // 3.4
         boolean wunschFuenf = false;     // 3.5
@@ -56,7 +55,6 @@ public final class FensterAussentuerControl {
 
         for (int current : ausgewaehlteSw) {
             switch (current) {
-                case 1: wunschEins = true; break; // 3.1
                 case 2: wunschZwei = true; break;       // 3.2
                 case 4: wunschVier = true; break;     // 3.4
                 case 5: wunschFuenf = true; break;    // 3.5
@@ -66,8 +64,6 @@ public final class FensterAussentuerControl {
                 case 9: wunschNeun = true; break;     // 3.9
             }
         }
-
-        // Rule validations
         if (wunschZwei && !hatDachgeschoss) {
             return false;
         }

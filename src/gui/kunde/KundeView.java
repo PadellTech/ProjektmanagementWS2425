@@ -143,7 +143,9 @@ public class KundeView{
     private void legeKundenAn(){
          Kunde kunde = null;
          // Objekt kunde fuellen
-		 kundeModel.validateUser(kunde);
+		 if(!kundeModel.validateUser(kunde)){
+			 return;
+		 }
          kundeControl.speichereKunden(kunde);
    	}
     
