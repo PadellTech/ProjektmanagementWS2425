@@ -20,6 +20,18 @@ public final class KundeModel {
 
 	// enthaelt das einzige KundeModel-Objekt
 	private static KundeModel kundeModel;
+
+
+
+	/**
+	 * Hilfsmethode um zu checken ob ein Haus ein Dachgeschoss hat.
+	 * @return
+	 */
+	public boolean hatDachgeschoss(){
+		return kunde.getHausnummer() != 1 && kunde.getHausnummer() != 6 &&
+				kunde.getHausnummer() != 7 && kunde.getHausnummer() != 14 &&
+				kunde.getHausnummer() != 15 && kunde.getHausnummer() != 24;
+	}
 	
 	// privater Konstruktor zur Realisierung des Singleton-Pattern
 	private KundeModel(){
