@@ -6,6 +6,9 @@ import business.kunde.Kunde;
 import business.kunde.KundeModel;
 import gui.fliesen.FliesenControl;
 import gui.grundriss.GrundrissControl;
+import gui.innentueren.InnentuerControl;
+import gui.fenster_aussentueren.FensterAussentuerControl;
+import gui.heizungen.HeizungControl;
 import gui.sanitaerinstallation.SanitaerControl;
 import javafx.stage.Stage;
 
@@ -24,6 +27,9 @@ public class KundeControl {
 
 	private SanitaerControl sanitaerControl;
 	private FliesenControl fliesenControl;
+	private FensterAussentuerControl fensterAussentuerControl;
+	private HeizungControl heizungControl;
+	private InnentuerControl innentuerControl;
     
     /**
 	 * erzeugt ein ControlObjekt inklusive View-Objekt und Model-Objekt zum 
@@ -54,6 +60,24 @@ public class KundeControl {
 		this.sanitaerControl.oeffneSanitaerView();
 	}
 
+	public void oeffneHeizungControl(){
+		if (this.heizungControl == null){
+			this.heizungControl = new HeizungControl(kundeModel);
+		}
+		this.heizungControl.oeffneHeizungView();
+	}
+	public void oeffneFensterAussentuercontrol(){
+		if (this.fensterAussentuerControl == null){
+			this.fensterAussentuerControl = new FensterAussentuerControl(kundeModel);
+		}
+		this.fensterAussentuerControl.oeffneFensterAussentuerView();
+	}
+	public void oeffneInnentuerControl(){
+		if (this.innentuerControl == null){
+			this.innentuerControl = new InnentuerControl(kundeModel);
+		}
+		this.innentuerControl.oeffneInnentuerView();
+	}
 	public void oeffneFliesenControl(){
 		if (this.fliesenControl == null){
 			this.fliesenControl = new FliesenControl(kundeModel);

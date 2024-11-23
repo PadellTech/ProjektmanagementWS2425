@@ -37,7 +37,12 @@ public class KundeView{
     private MenuItem mnItmGrundriss  	= new MenuItem("Grundrissvarianten");
 	private MenuItem mnItmSanitaer		= new MenuItem("Sanitärvarianten");
 	private MenuItem mnItmFliesen		= new MenuItem("Fliesenvarianten");
-    //-------Ende Attribute der grafischen Oberflaeche-------
+	private MenuItem mnItmInnentuer		= new MenuItem("Innentürvarianten");
+	private MenuItem mnItmHeizung		= new MenuItem("Heizungsvarianten");
+	private MenuItem mnItmFensterAussentuer		= new MenuItem("Fenster und Außentür-varianten");
+
+
+	//-------Ende Attribute der grafischen Oberflaeche-------
   
     /**
      * erzeugt ein KundeView-Objekt und initialisiert die Steuerelemente der Maske
@@ -87,6 +92,9 @@ public class KundeView{
 	    borderPane.setTop(mnBar);
 	    mnBar.getMenus().add(mnSonderwuensche);
 	    mnSonderwuensche.getItems().add(mnItmGrundriss);
+		mnSonderwuensche.getItems().add(mnItmFensterAussentuer);
+		mnSonderwuensche.getItems().add(mnItmInnentuer);
+		mnSonderwuensche.getItems().add(mnItmHeizung);
 		mnSonderwuensche.getItems().add(mnItmSanitaer);
 		mnSonderwuensche.getItems().add(mnItmFliesen);
     }
@@ -115,6 +123,15 @@ public class KundeView{
 		  mnItmFliesen.setOnAction(aEvent -> {
 			  kundeControl.oeffneFliesenControl();
 		  });
+		mnItmHeizung.setOnAction(aEvent -> {
+			kundeControl.oeffneHeizungControl();
+		});
+		mnItmInnentuer.setOnAction(aEvent -> {
+			kundeControl.oeffneInnentuerControl();
+		});
+		mnItmFensterAussentuer.setOnAction(aEvent -> {
+			kundeControl.oeffneFensterAussentuercontrol();
+		});
     }
     
     private void holeInfoDachgeschoss(){ 
