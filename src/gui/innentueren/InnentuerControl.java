@@ -96,13 +96,11 @@ public final class InnentuerControl {
         int keller = hatDachgeschoss ? 1: 2;
         int eg = wunschZwei ? 1 : 0;
         int og = wunschDrei ? 3 : 4;
-        int dg;
+        int dg = 0;
         if (hatDachgeschoss && wunschVier && wunschSechs){
             dg = 2;
         } else if (hatDachgeschoss && (wunschVier || wunschSechs)){
             dg = 1;
-        } else {
-            dg = 0;
         }
 
         return keller + eg +og +dg;
