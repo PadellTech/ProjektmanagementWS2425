@@ -82,8 +82,8 @@ public final class FliesenControl {
         if(wunschVier && wunschZwei){
             return false;
         }
-        if(wunschFuenf && (!hatDachgeschoss || !grundrissSw));{
-
+        if(wunschFuenf && (!hatDachgeschoss || !grundrissSw)){
+            return false;
         }
         if(wunschSechs && !wunschFuenf){
             return false;
