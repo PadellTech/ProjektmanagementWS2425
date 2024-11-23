@@ -87,7 +87,10 @@ public final class KundeModel {
 	 * @param kunde - the given user
 	 * @return		- whether the users parameters are valid
 	 */
-	private boolean validateUser(Kunde kunde){
+	public boolean validateUser(Kunde kunde){
+		if(kunde == null){
+			return false;
+		}
 		boolean validEmail = kunde.getEmail() != null && kunde.getEmail().contains("@");
 		boolean validPhone = kunde.getTelefonnummer() != null && kunde.getTelefonnummer().matches("\\d+");
 		if(!validEmail && !validPhone){
