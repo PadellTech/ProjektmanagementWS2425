@@ -28,7 +28,7 @@ public final class KundeModel {
 	 * @return
 	 */
 	public boolean hatDachgeschoss(){
-		return kunde.getHausnummer() != 1 && kunde.getHausnummer() != 6 &&
+		return kunde != null && kunde.getHausnummer() != 1 && kunde.getHausnummer() != 6 &&
 				kunde.getHausnummer() != 7 && kunde.getHausnummer() != 14 &&
 				kunde.getHausnummer() != 15 && kunde.getHausnummer() != 24;
 	}

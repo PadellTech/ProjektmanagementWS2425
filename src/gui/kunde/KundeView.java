@@ -36,6 +36,7 @@ public class KundeView{
     private Menu mnSonderwuensche    	= new Menu("Sonderwünsche");
     private MenuItem mnItmGrundriss  	= new MenuItem("Grundrissvarianten");
 	private MenuItem mnItmSanitaer		= new MenuItem("Sanitärvarianten");
+	private MenuItem mnItmFliesen		= new MenuItem("Fliesenvarianten");
     //-------Ende Attribute der grafischen Oberflaeche-------
   
     /**
@@ -87,6 +88,7 @@ public class KundeView{
 	    mnBar.getMenus().add(mnSonderwuensche);
 	    mnSonderwuensche.getItems().add(mnItmGrundriss);
 		mnSonderwuensche.getItems().add(mnItmSanitaer);
+		mnSonderwuensche.getItems().add(mnItmFliesen);
     }
 
     /* initialisiert die Listener zu den Steuerelementen auf de Maske */
@@ -109,6 +111,9 @@ public class KundeView{
 	    });
 		  mnItmSanitaer.setOnAction(aEvent -> {
 			  kundeControl.oeffneSanitaerControl();
+		  });
+		  mnItmFliesen.setOnAction(aEvent -> {
+			  kundeControl.oeffneFliesenControl();
 		  });
     }
     

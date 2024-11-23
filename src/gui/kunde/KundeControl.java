@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 import business.kunde.Kunde;
 import business.kunde.KundeModel;
+import gui.fliesen.FliesenControl;
 import gui.grundriss.GrundrissControl;
 import gui.sanitaerinstallation.SanitaerControl;
 import javafx.stage.Stage;
@@ -22,6 +23,7 @@ public class KundeControl {
     private GrundrissControl grundrissControl;
 
 	private SanitaerControl sanitaerControl;
+	private FliesenControl fliesenControl;
     
     /**
 	 * erzeugt ein ControlObjekt inklusive View-Objekt und Model-Objekt zum 
@@ -50,6 +52,13 @@ public class KundeControl {
 			this.sanitaerControl = new SanitaerControl(kundeModel);
 		}
 		this.sanitaerControl.oeffneSanitaerView();
+	}
+
+	public void oeffneFliesenControl(){
+		if (this.fliesenControl == null){
+			this.fliesenControl = new FliesenControl(kundeModel);
+		}
+		this.fliesenControl.oeffneFliesenView();
 	}
     
 	/**
