@@ -67,5 +67,26 @@ public final class KundeModel {
 	    throws SQLException, Exception{
         // Speicherung des Kunden in der DB
    	    this.kunde = kunde;
-	}  
+	}
+
+	/**
+	 * Validates the given User.
+	 *
+	 * @param kunde - the given user
+	 * @return		- whether the users parameters are valid
+	 */
+	private boolean validateUser(Kunde kunde){
+		boolean validEmail = kunde.getEmail() != null && kunde.getEmail().contains("@");
+		boolean validPhone = kunde.getTelefonnummer() != null && kunde.getTelefonnummer().matches("\\d+");
+		if(!validEmail && !validPhone){
+			return false;
+		}
+		if(kunde.getNachname() == null || kunde.getNachname().trim().isEmpty()) {
+			return false;
+		}
+		if (kunde.getHausnummer() < 1 || kunde.getHausnummer() > 24) {
+			return false;
+		}
+		return true;
+	}
 }
