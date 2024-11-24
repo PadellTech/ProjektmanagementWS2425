@@ -20,6 +20,18 @@ public final class KundeModel {
 
 	// enthaelt das einzige KundeModel-Objekt
 	private static KundeModel kundeModel;
+
+
+
+	/**
+	 * Hilfsmethode um zu checken ob ein Haus ein Dachgeschoss hat.
+	 * @return
+	 */
+	public boolean hatDachgeschoss(){
+		return kunde != null && kunde.getHausnummer() != 1 && kunde.getHausnummer() != 6 &&
+				kunde.getHausnummer() != 7 && kunde.getHausnummer() != 14 &&
+				kunde.getHausnummer() != 15 && kunde.getHausnummer() != 24;
+	}
 	
 	// privater Konstruktor zur Realisierung des Singleton-Pattern
 	private KundeModel(){
@@ -67,5 +79,29 @@ public final class KundeModel {
 	    throws SQLException, Exception{
         // Speicherung des Kunden in der DB
    	    this.kunde = kunde;
-	}  
+	}
+
+	/**
+	 * Validates the given User.
+	 *
+	 * @param kunde - the given user
+	 * @return		- whether the users parameters are valid
+	 */
+	public boolean validateUser(Kunde kunde){
+		if(kunde == null){
+			return false;
+		}
+		boolean validEmail = kunde.getEmail() != null && kunde.getEmail().contains("@");
+		boolean validPhone = kunde.getTelefonnummer() != null && kunde.getTelefonnummer().matches("\\d+");
+		if(!validEmail && !validPhone){
+			return false;
+		}
+		if(kunde.getNachname() == null || kunde.getNachname().trim().isEmpty()) {
+			return false;
+		}
+		if (kunde.getHausnummer() < 1 || kunde.getHausnummer() > 24) {
+			return false;
+		}
+		return true;
+	}
 }
