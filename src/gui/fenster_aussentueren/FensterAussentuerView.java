@@ -49,6 +49,7 @@ public class FensterAussentuerView extends BasisView{
             txtPreisPlatzhalter[i] = new TextField();
             lblPlatzhalterEuro[i] = new Label("Euro");
             chckBxPlatzhalter[i] = new CheckBox();
+            txtPreisPlatzhalter[i].setText(sonderwuensche[i][1]);
 
             // Setze Textfelder auf nicht editierbar
             txtPreisPlatzhalter[i].setEditable(false);
