@@ -1,5 +1,6 @@
 package gui.innentueren;
 
+import business.dbVerbindung.DBVerbindung;
 import business.kunde.KundeModel;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -13,17 +14,19 @@ public final class InnentuerControl {
     // das View-Objekt des Innentuer-Fensters
     private InnentuerView innentuerView;
     private KundeModel kundeModel;
+    private DBVerbindung connection;
 
     /**
      * erzeugt ein ControlObjekt inklusive View-Objekt und Model-Objekt zum
      * Fenster fuer die Sonderwuensche zum Innentuer.
      * @param kundeModel, KundeModel zum abgreifen der Kunden
      */
-    public InnentuerControl(KundeModel kundeModel){
+    public InnentuerControl(KundeModel kundeModel, DBVerbindung connection){
         Stage stageInnentuer = new Stage();
         stageInnentuer.initModality(Modality.APPLICATION_MODAL);
         this.innentuerView = new InnentuerView(this, stageInnentuer);
         this.kundeModel = kundeModel;
+        this.connection = connection;
     }
 
     /**
@@ -33,7 +36,9 @@ public final class InnentuerControl {
         this.innentuerView.oeffneInnentuerView();
     }
 
-    public void leseInnentuerSonderwuensche(){
+    public String[][] leseInnentuerSonderwuensche(){
+    	this.connection = DBVerbindung.getInstance();
+    	return connection.executeSelectNameAndPrice("Wunschoption", 3);
     }
 
     /**

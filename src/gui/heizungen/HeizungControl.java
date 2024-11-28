@@ -1,6 +1,7 @@
 package gui.heizungen;
 
 import business.kunde.KundeModel;
+import business.dbVerbindung.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -13,13 +14,14 @@ public final class HeizungControl {
     // das View-Objekt des Heizung-Fensters
     private HeizungView heizungView;
     private KundeModel kundeModel;
+    private DBVerbindung connection;
 
     /**
      * erzeugt ein ControlObjekt inklusive View-Objekt und Model-Objekt zum
      * Fenster fuer die Sonderwuensche zum Heizung.
      * @param kundeModel, KundeModel zum abgreifen der Kunden
      */
-    public HeizungControl(KundeModel kundeModel){
+    public HeizungControl(KundeModel kundeModel, DBVerbindung connection){
         Stage stageHeizung = new Stage();
         stageHeizung.initModality(Modality.APPLICATION_MODAL);
         this.heizungView = new HeizungView(this, stageHeizung);
@@ -33,7 +35,9 @@ public final class HeizungControl {
         this.heizungView.oeffneHeizungView();
     }
 
-    public void leseHeizungSonderwuensche(){
+    public String[][] leseHeizungSonderwuensche(){
+    	this.connection = DBVerbindung.getInstance();
+    	return connection.executeSelectNameAndPrice("Wunschoption", 4);
     }
 
     /**

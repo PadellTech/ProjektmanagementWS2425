@@ -2,8 +2,10 @@ package gui.sanitaerinstallation;
 
 import business.kunde.Kunde;
 import business.kunde.KundeModel;
+import business.dbVerbindung.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
 
 /**
  * Klasse, welche das Fenster mit den Sonderwuenschen zu den Sanitaer-Varianten
@@ -14,17 +16,19 @@ public final class SanitaerControl {
     // das View-Objekt des Sanitaer-Fensters
     private SanitaerView sanitaerView;
     private KundeModel kundeModel;
+    private DBVerbindung connection;
 
     /**
      * erzeugt ein ControlObjekt inklusive View-Objekt und Model-Objekt zum
      * Fenster fuer die Sonderwuensche zum Sanitaer.
      * @param kundeModel, KundeModel zum abgreifen der Kunden
      */
-    public SanitaerControl(KundeModel kundeModel){
+    public SanitaerControl(KundeModel kundeModel, DBVerbindung connection){
         Stage stageSanitaer = new Stage();
         stageSanitaer.initModality(Modality.APPLICATION_MODAL);
         this.sanitaerView = new SanitaerView(this, stageSanitaer);
         this.kundeModel = kundeModel;
+        this.connection = connection;
     }
 
     /**
@@ -34,7 +38,9 @@ public final class SanitaerControl {
         this.sanitaerView.oeffneSanitaerView();
     }
 
-    public void leseSanitaerSonderwuensche(){
+    public String[][] leseSanitaerSonderwuensche(){
+    	this.connection = DBVerbindung.getInstance();
+    	return connection.executeSelectNameAndPrice("Wunschoption", 5);
     }
 
     /**

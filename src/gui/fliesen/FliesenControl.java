@@ -1,5 +1,5 @@
 package gui.fliesen;
-
+import business.dbVerbindung.*;
 import business.kunde.Kunde;
 import business.kunde.KundeModel;
 import javafx.stage.Modality;
@@ -14,17 +14,19 @@ public final class FliesenControl {
     // das View-Objekt des Fliesen-Fensters
     private FliesenView fliesenView;
     private KundeModel kundeModel;
+    private DBVerbindung connection;
 
     /**
      * erzeugt ein ControlObjekt inklusive View-Objekt und Model-Objekt zum
      * Fenster fuer die Sonderwuensche zum Fliesen.
      * @param kundeModel, KundeModel zum abgreifen der Kunden
      */
-    public FliesenControl(KundeModel kundeModel){
+    public FliesenControl(KundeModel kundeModel, DBVerbindung connection){
         Stage stageFliesen = new Stage();
         stageFliesen.initModality(Modality.APPLICATION_MODAL);
         this.fliesenView = new FliesenView(this, stageFliesen);
         this.kundeModel = kundeModel;
+        this.connection = connection;
     }
 
     /**
@@ -34,7 +36,9 @@ public final class FliesenControl {
         this.fliesenView.oeffneFliesenView();
     }
 
-    public void leseFliesenSonderwuensche(){
+    public String[][] leseFliesenSonderwuensche(){
+    	this.connection = DBVerbindung.getInstance();
+    	return connection.executeSelectNameAndPrice("Wunschoption", 6);
     }
 
     /**

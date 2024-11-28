@@ -1,5 +1,6 @@
 package gui.grundriss;
 
+import business.dbVerbindung.DBVerbindung;
 import business.kunde.KundeModel;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -12,16 +13,18 @@ public final class GrundrissControl {
 	
 	// das View-Objekt des Grundriss-Fensters
 	private GrundrissView grundrissView;
+	private DBVerbindung connection;
 
 	/**
 	 * erzeugt ein ControlObjekt inklusive View-Objekt und Model-Objekt zum 
 	 * Fenster fuer die Sonderwuensche zum Grundriss.
 	 * @param grundrissStage, Stage fuer das View-Objekt zu den Sonderwuenschen zum Grundriss
 	 */
-	public GrundrissControl(KundeModel kundeModel){  
+	public GrundrissControl(KundeModel kundeModel, DBVerbindung connection){  
 	   	Stage stageGrundriss = new Stage();
     	stageGrundriss.initModality(Modality.APPLICATION_MODAL);
     	this.grundrissView = new GrundrissView(this, stageGrundriss);
+    	this.connection = connection;
 	}
 	    
 	/**
@@ -31,7 +34,9 @@ public final class GrundrissControl {
 		this.grundrissView.oeffneGrundrissView();
 	}
 
-	public void leseGrundrissSonderwuensche(){
+	public String[][] leseGrundrissSonderwuensche(){
+		this.connection = DBVerbindung.getInstance();
+		return connection.executeSelectNameAndPrice("Wunschoption", 1);
     } 
 	
 	public boolean pruefeKonstellationSonderwuensche(int[] ausgewaehlteSw){
