@@ -12,13 +12,12 @@ public class GrundrissView extends BasisView{
  
  	// das Control-Objekt des Grundriss-Fensters
 	private GrundrissControl grundrissControl;
-   
-    //---Anfang Attribute der grafischen Oberflaeche---
-    private Label lblWandKueche    	     
-        = new Label("Wand zur Abtrennung der K�che von dem Essbereich");
-    private TextField txtPreisWandKueche 	= new TextField();
-    private Label lblWandKuecheEuro 		= new Label("Euro");
-    private CheckBox chckBxWandKueche 		= new CheckBox();
+    private String[][] sonderwuensche;
+ // --- Anfang Attribute der grafischen Oberfläche ---
+    private Label[] lblPlatzhalter = new Label[6]; // Array für Labels
+    private TextField[] txtPreisPlatzhalter = new TextField[6]; // Array für Textfelder
+    private Label[] lblPlatzhalterEuro = new Label[6]; // Array für Euro Labels
+    private CheckBox[] chckBxPlatzhalter = new CheckBox[6]; // Array für Checkboxes
     //-------Ende Attribute der grafischen Oberflaeche-------
   
     /**
@@ -30,23 +29,34 @@ public class GrundrissView extends BasisView{
     public GrundrissView (GrundrissControl grundrissControl, Stage grundrissStage){
     	super(grundrissStage);
         this.grundrissControl = grundrissControl;
-        grundrissStage.setTitle("Sonderw�nsche zu Grundriss-Varianten");
-                
+        grundrissStage.setTitle("Sonderw�nsche zu Grundriss-Varianten");
+        sonderwuensche = this.leseGrundrissSonderwuensche();        
 	    this.initKomponenten();
-	    this.leseGrundrissSonderwuensche();
+	    
     }
   
     /* initialisiert die Steuerelemente auf der Maske */
-    protected void initKomponenten(){
-    	super.initKomponenten(); 
-       	super.getLblSonderwunsch().setText("Grundriss-Varianten");
-       	super.getGridPaneSonderwunsch().add(lblWandKueche, 0, 1);
-    	super.getGridPaneSonderwunsch().add(txtPreisWandKueche, 1, 1);
-    	txtPreisWandKueche.setEditable(false);
-    	super.getGridPaneSonderwunsch().add(lblWandKuecheEuro, 2, 1);
-    	super.getGridPaneSonderwunsch().add(chckBxWandKueche, 3, 1);
-    }  
-    
+    protected void initKomponenten() {
+        super.initKomponenten();
+        super.getLblSonderwunsch().setText("Heizungs-Varianten");
+
+        // Initialisieren der Arrays mit den entsprechenden Elementen
+        for (int i = 0; i < 6; i++) {
+            lblPlatzhalter[i] = new Label(sonderwuensche[i][0]);
+            txtPreisPlatzhalter[i] = new TextField();
+            lblPlatzhalterEuro[i] = new Label("Euro");
+            chckBxPlatzhalter[i] = new CheckBox();
+
+            // Setze Textfelder auf nicht editierbar
+            txtPreisPlatzhalter[i].setEditable(false);
+
+            // Füge alle Komponenten zum GridPane hinzu
+            super.getGridPaneSonderwunsch().add(lblPlatzhalter[i], 0, i + 1);
+            super.getGridPaneSonderwunsch().add(txtPreisPlatzhalter[i], 1, i + 1);
+            super.getGridPaneSonderwunsch().add(lblPlatzhalterEuro[i], 2, i + 1);
+            super.getGridPaneSonderwunsch().add(chckBxPlatzhalter[i], 3, i + 1);
+        }
+    }
     /**
 	 * macht das GrundrissView-Objekt sichtbar.
 	 */
@@ -54,8 +64,8 @@ public class GrundrissView extends BasisView{
 		super.oeffneBasisView();
 	}
     
-    private void leseGrundrissSonderwuensche(){
-    	this.grundrissControl.leseGrundrissSonderwuensche();
+    private String[][] leseGrundrissSonderwuensche(){
+    	return this.grundrissControl.leseGrundrissSonderwuensche();
     }
     
  	/* berechnet den Preis der ausgesuchten Sonderwuensche und zeigt diesen an */

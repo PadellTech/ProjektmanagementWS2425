@@ -7,6 +7,15 @@ public class Kunde {
 	private String nachname;
 	private String telefonnummer;
 	private String email;
+	
+	public Kunde(int hausnummer, String vorname, String nachname, String telefonnummer, String email)
+	{
+		this.hausnummer = hausnummer;
+		this.vorname = vorname;
+		this.email = email;
+		this.telefonnummer = telefonnummer;
+		this.nachname = nachname;
+	}
 		  
 	public int getHausnummer() {
 		return hausnummer;

@@ -15,12 +15,12 @@ public class FensterAussentuerView extends BasisView{
     // das Control-Objekt des FensterAussentuer-Fensters
     private FensterAussentuerControl fatControl;
 
-    //---Anfang Attribute der grafischen Oberflaeche---
-    private Label lblPlatzhalter
-            = new Label("Platzhalter");
-    private TextField txtPreisPlatzhalter 	= new TextField();
-    private Label lblPlatzhalterEuro 		= new Label("Euro");
-    private CheckBox chckBxPlatzhalter 		= new CheckBox();
+    private String[][] sonderwuensche;
+ // --- Anfang Attribute der grafischen Oberfläche ---
+    private Label[] lblPlatzhalter = new Label[9]; // Array für Labels
+    private TextField[] txtPreisPlatzhalter = new TextField[9]; // Array für Textfelder
+    private Label[] lblPlatzhalterEuro = new Label[9]; // Array für Euro Labels
+    private CheckBox[] chckBxPlatzhalter = new CheckBox[9]; // Array für Checkboxes
     //-------Ende Attribute der grafischen Oberflaeche-------
 
     /**
@@ -33,20 +33,32 @@ public class FensterAussentuerView extends BasisView{
         super(fatStage);
         this.fatControl = fatControl;
         fatStage.setTitle("Sonderwünsche zu Fenster und Aussentüren-Varianten");
-
+        sonderwuensche = this.leseFensterAussentuerSonderwuensche();
         this.initKomponenten();
-        this.leseFensterAussentuerSonderwuensche();
+        
     }
 
     /* initialisiert die Steuerelemente auf der Maske */
-    protected void initKomponenten(){
+    protected void initKomponenten() {
         super.initKomponenten();
-        super.getLblSonderwunsch().setText("Fenster und Aussentür-Varianten");
-        super.getGridPaneSonderwunsch().add(lblPlatzhalter, 0, 1);
-        super.getGridPaneSonderwunsch().add(txtPreisPlatzhalter, 1, 1);
-        txtPreisPlatzhalter.setEditable(false);
-        super.getGridPaneSonderwunsch().add(lblPlatzhalterEuro, 2, 1);
-        super.getGridPaneSonderwunsch().add(chckBxPlatzhalter, 3, 1);
+        super.getLblSonderwunsch().setText("Heizungs-Varianten");
+
+        // Initialisieren der Arrays mit den entsprechenden Elementen
+        for (int i = 0; i < 9; i++) {
+            lblPlatzhalter[i] = new Label(sonderwuensche[i][0]);
+            txtPreisPlatzhalter[i] = new TextField();
+            lblPlatzhalterEuro[i] = new Label("Euro");
+            chckBxPlatzhalter[i] = new CheckBox();
+
+            // Setze Textfelder auf nicht editierbar
+            txtPreisPlatzhalter[i].setEditable(false);
+
+            // Füge alle Komponenten zum GridPane hinzu
+            super.getGridPaneSonderwunsch().add(lblPlatzhalter[i], 0, i + 1);
+            super.getGridPaneSonderwunsch().add(txtPreisPlatzhalter[i], 1, i + 1);
+            super.getGridPaneSonderwunsch().add(lblPlatzhalterEuro[i], 2, i + 1);
+            super.getGridPaneSonderwunsch().add(chckBxPlatzhalter[i], 3, i + 1);
+        }
     }
 
     /**
@@ -56,8 +68,8 @@ public class FensterAussentuerView extends BasisView{
         super.oeffneBasisView();
     }
 
-    private void leseFensterAussentuerSonderwuensche(){
-        this.fatControl.leseFensterAussentuerSonderwuensche();
+    private String[][] leseFensterAussentuerSonderwuensche(){
+        return this.fatControl.leseFensterAussentuerSonderwuensche();
     }
 
     /* berechnet den Preis der ausgesuchten Sonderwuensche und zeigt diesen an */

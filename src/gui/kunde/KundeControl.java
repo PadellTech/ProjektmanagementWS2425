@@ -11,6 +11,7 @@ import gui.fenster_aussentueren.FensterAussentuerControl;
 import gui.heizungen.HeizungControl;
 import gui.sanitaerinstallation.SanitaerControl;
 import javafx.stage.Stage;
+import business.dbVerbindung.*;
 
 /**
  * Klasse, welche das Grundfenster mit den Kundendaten kontrolliert.
@@ -30,15 +31,17 @@ public class KundeControl {
 	private FensterAussentuerControl fensterAussentuerControl;
 	private HeizungControl heizungControl;
 	private InnentuerControl innentuerControl;
+	private DBVerbindung connection;
     
     /**
 	 * erzeugt ein ControlObjekt inklusive View-Objekt und Model-Objekt zum 
 	 * Grundfenster mit den Kundendaten.
 	 * @param primaryStage, Stage fuer das View-Objekt zu dem Grundfenster mit den Kundendaten
 	 */
-    public KundeControl(Stage primaryStage) { 
+    public KundeControl(Stage primaryStage, DBVerbindung connection) { 
         this.kundeModel = KundeModel.getInstance(); 
         this.kundeView = new KundeView(this, primaryStage, kundeModel);
+        this.connection = connection;
     }
     
     /*
@@ -47,7 +50,7 @@ public class KundeControl {
      */
     public void oeffneGrundrissControl(){
     	if (this.grundrissControl == null){
-    		this.grundrissControl = new GrundrissControl(kundeModel);
+    		this.grundrissControl = new GrundrissControl(kundeModel, connection);
       	}
     	this.grundrissControl.oeffneGrundrissView();
     }
@@ -55,32 +58,34 @@ public class KundeControl {
 
 	public void oeffneSanitaerControl(){
 		if (this.sanitaerControl == null){
-			this.sanitaerControl = new SanitaerControl(kundeModel);
+			this.sanitaerControl = new SanitaerControl(kundeModel, connection);
 		}
 		this.sanitaerControl.oeffneSanitaerView();
 	}
 
 	public void oeffneHeizungControl(){
 		if (this.heizungControl == null){
-			this.heizungControl = new HeizungControl(kundeModel);
+			//connection.notNull();
+			this.heizungControl = new HeizungControl(kundeModel, connection);
 		}
 		this.heizungControl.oeffneHeizungView();
 	}
 	public void oeffneFensterAussentuercontrol(){
 		if (this.fensterAussentuerControl == null){
-			this.fensterAussentuerControl = new FensterAussentuerControl(kundeModel);
+			this.fensterAussentuerControl = new FensterAussentuerControl(kundeModel, connection);
 		}
 		this.fensterAussentuerControl.oeffneFensterAussentuerView();
 	}
 	public void oeffneInnentuerControl(){
 		if (this.innentuerControl == null){
-			this.innentuerControl = new InnentuerControl(kundeModel);
+			this.innentuerControl = new InnentuerControl(kundeModel, connection);
 		}
 		this.innentuerControl.oeffneInnentuerView();
 	}
 	public void oeffneFliesenControl(){
 		if (this.fliesenControl == null){
-			this.fliesenControl = new FliesenControl(kundeModel);
+			connection.notNull();
+			this.fliesenControl = new FliesenControl(kundeModel, connection);
 		}
 		this.fliesenControl.oeffneFliesenView();
 	}
@@ -91,7 +96,7 @@ public class KundeControl {
 	 */
     public void speichereKunden(Kunde kunde){
       	try{
-    		kundeModel.speichereKunden(kunde);
+    		kundeModel.speichereKunden(kunde,this.connection);
     	}
     	catch(SQLException exc){
     		exc.printStackTrace();

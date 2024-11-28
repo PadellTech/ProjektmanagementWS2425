@@ -3,6 +3,7 @@ package gui.fenster_aussentueren;
 import business.kunde.KundeModel;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import business.dbVerbindung.*;
 
 /**
  * Klasse, welche das Fenster mit den Sonderwuenschen zu den FensterAussentuer-Varianten
@@ -13,17 +14,19 @@ public final class FensterAussentuerControl {
     // das View-Objekt des FensterAussentuer-Fensters
     private FensterAussentuerView fatView;
     private KundeModel kundeModel;
+    private DBVerbindung connection;
 
     /**
      * erzeugt ein ControlObjekt inklusive View-Objekt und Model-Objekt zum
      * Fenster fuer die Sonderwuensche zu FensterAussentuer.
      * @param kundeModel, KundeModel zum abgreifen der Kunden
      */
-    public FensterAussentuerControl(KundeModel kundeModel){
+    public FensterAussentuerControl(KundeModel kundeModel, DBVerbindung connection){
         Stage stageFensterAussentuer = new Stage();
         stageFensterAussentuer.initModality(Modality.APPLICATION_MODAL);
         this.fatView = new FensterAussentuerView(this, stageFensterAussentuer);
         this.kundeModel = kundeModel;
+        this.connection = connection;
     }
 
     /**
@@ -33,7 +36,9 @@ public final class FensterAussentuerControl {
         this.fatView.oeffneFensterAussentuerView();
     }
 
-    public void leseFensterAussentuerSonderwuensche(){
+    public String[][] leseFensterAussentuerSonderwuensche(){
+    	this.connection = DBVerbindung.getInstance();
+    	return connection.executeSelectNameAndPrice("Wunschoption", 2);
     }
 
     /**

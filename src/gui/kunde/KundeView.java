@@ -28,18 +28,24 @@ public class KundeView{
     private ComboBox<Integer> 
         cmbBxNummerHaus                 = new ComboBox<Integer>();
     private Label lblVorname         	= new Label("Vorname");
-    private TextField txtVorname     	= new TextField();   
+    private TextField txtVorname     	= new TextField();
+    private Label lblNachname         	= new Label("Nachname");
+    private TextField txtNachname     	= new TextField(); 
+    private Label lblNummer         	= new Label("Telefonnummer");
+    private TextField txtNummer    		= new TextField(); 
+    private Label lblEmail	        	= new Label("Email");
+    private TextField txtEmail	     	= new TextField(); 
     private Button btnAnlegen	 	  	= new Button("Anlegen");
-    private Button btnAendern 	      	= new Button("Ändern");
-    private Button btnLoeschen 	 		= new Button("Löschen");
+    private Button btnAendern 	      	= new Button("ï¿½ndern");
+    private Button btnLoeschen 	 		= new Button("Lï¿½schen");
     private MenuBar mnBar 			  	= new MenuBar();
-    private Menu mnSonderwuensche    	= new Menu("Sonderwünsche");
+    private Menu mnSonderwuensche    	= new Menu("Sonderwï¿½nsche");
     private MenuItem mnItmGrundriss  	= new MenuItem("Grundrissvarianten");
-	private MenuItem mnItmSanitaer		= new MenuItem("Sanitärvarianten");
+	private MenuItem mnItmSanitaer		= new MenuItem("Sanitï¿½rvarianten");
 	private MenuItem mnItmFliesen		= new MenuItem("Fliesenvarianten");
-	private MenuItem mnItmInnentuer		= new MenuItem("Innentürvarianten");
+	private MenuItem mnItmInnentuer		= new MenuItem("Innentï¿½rvarianten");
 	private MenuItem mnItmHeizung		= new MenuItem("Heizungsvarianten");
-	private MenuItem mnItmFensterAussentuer		= new MenuItem("Fenster und Außentür-varianten");
+	private MenuItem mnItmFensterAussentuer		= new MenuItem("Fenster und Auï¿½entï¿½r-varianten");
 
 
 	//-------Ende Attribute der grafischen Oberflaeche-------
@@ -81,6 +87,13 @@ public class KundeView{
 	    cmbBxNummerHaus.setItems(this.kundeModel.getPlannummern());
 	    gridPane.add(lblVorname, 0, 3);
 	    gridPane.add(txtVorname, 1, 3);
+	    gridPane.add(lblNachname, 0, 4);
+	    gridPane.add(txtNachname, 1, 4);
+	    gridPane.add(lblNummer, 0, 5);
+	    gridPane.add(txtNummer, 1, 5);
+	    gridPane.add(lblEmail, 0, 6);
+	    gridPane.add(txtEmail, 1, 6);
+	    
 	    // Buttons
 	    gridPane.add(btnAnlegen, 0, 7);
 	    btnAnlegen.setMinSize(150,  25);
@@ -141,7 +154,7 @@ public class KundeView{
     }
     
     private void legeKundenAn(){
-         Kunde kunde = null;
+         Kunde kunde = new Kunde(cmbBxNummerHaus.getValue() ,txtVorname.getText(), txtNachname.getText(), txtNummer.getText(), txtEmail.getText());
          // Objekt kunde fuellen
 		 if(!kundeModel.validateUser(kunde)){
 			 return;

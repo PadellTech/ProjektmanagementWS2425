@@ -1,6 +1,8 @@
 package business.kunde;
 
 import java.sql.SQLException;
+
+import business.dbVerbindung.DBVerbindung;
 import javafx.collections.*;
   
 /** 
@@ -75,10 +77,24 @@ public final class KundeModel {
 	 * @throws SQLException, Fehler beim Speichern in die Datenbank
 	 * @throws Exception, unbekannter Fehler
 	 */
-	public void speichereKunden(Kunde kunde)
+	public void speichereKunden(Kunde kunde, DBVerbindung connection)
 	    throws SQLException, Exception{
-        // Speicherung des Kunden in der DB
+     
    	    this.kunde = kunde;
+   	    // Speicherung des Kunden in der DB
+   	    if(this.validateUser(kunde)) {
+   	    	connection.executeUpdate(
+   	    		    "INSERT INTO Kunde (kundennummer, hausnummer, vorname, nachname, telefonnummer, email) " +
+   	    		    "VALUES (2, " + this.kunde.getHausnummer() + ", '" + this.kunde.getVorname() + "', '" + 
+   	    		    this.kunde.getNachname() + "', '" + this.kunde.getTelefonnummer() + "', '" + 
+   	    		    this.kunde.getEmail() + "');"
+   	    		);
+
+   	 System.out.println("Update erfolgreich");
+   	    }
+   	    else {
+   	    	System.out.println("Nicht validiert");
+   	    }
 	}
 
 	/**
