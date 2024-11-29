@@ -97,8 +97,7 @@ public final class InnentuerControl {
         boolean wunschDrei = false;
         boolean wunschVier = false;
         boolean wunschSechs =false;
-        //TODO: Placeholder bis es tatsächlich Grundisssonderwünsche gibt
-        int[] grundrissSw = {1,2,3,4,5,6};
+        int[] grundrissSw = connection.executeSelectCustomerWishes(kundeModel.getKunde().getHausnummer(),1);
         for(int current: grundrissSw){
             switch (current){
                 case 2:

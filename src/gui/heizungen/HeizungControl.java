@@ -83,9 +83,8 @@ public final class HeizungControl {
         if (wunschZwei && (z < 1 || z > x + anzahlHeizkoerper)) {
             return false;
         }
-        //TODO: Placeholder bis es tatsächlich Grundisssonderwünsche gibt
         if (wunschDrei) {
-            int[] grundrissSw = {1, 6};
+            int[] grundrissSw = connection.executeSelectCustomerWishes(kundeModel.getKunde().getHausnummer(), 1);
             boolean grundrissWunschSechs = false;
             for (Integer current : grundrissSw) {
                 if (current == 6) {
@@ -118,8 +117,7 @@ public final class HeizungControl {
         boolean hatDachgeschoss = kundeModel.hatDachgeschoss();
         boolean wunschDrei = false;
         boolean wunschSechs =false;
-        //TODO: Placeholder bis es tatsächlich Grundisssonderwünsche gibt
-        int[] grundrissSw = {1,2,3,4,5,6};
+        int[] grundrissSw = connection.executeSelectCustomerWishes(kundeModel.getKunde().getHausnummer(), 1);
 
         for(int current: grundrissSw){
             switch (current){
