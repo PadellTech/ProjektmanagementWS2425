@@ -49,34 +49,25 @@ public final class HeizungControl {
      * @param y - gegebene Anzahl der Handtuchheizkoerper
      * @return - Ob die Sonderwunschkombination gueltig ist
      */
-    public boolean pruefeKonstellationSonderwuensche(int[] ausgewaehlteSw, int x, int z, int y){
+    public boolean pruefeKonstellationSonderwuensche(int[] ausgewaehlteSw, int x, int z, int y) {
         boolean hatDachgeschoss = kundeModel.hatDachgeschoss();
+        boolean wunschEins = false;
+        boolean wunschZwei = false;
+        boolean wunschDrei = false;
         boolean wunschVier = false;
         boolean wunschFuenf = false;
 
-        int anzahlHeizkoerper = getAnzahlHeizkoerper();
-        if(x < 1 || x > 5) {
-            return false;
-        }
-        if(z < 1 || z > x + anzahlHeizkoerper){
-            return false;
-        }
-        //TODO: Placeholder bis es tatsächlich Grundisssonderwünsche gibt
-        int[] grundrissSw = {1,6};
-        boolean grundrissWunschSechs = false;
-        for(Integer current: grundrissSw){
-            if (current == 6){
-                grundrissWunschSechs = true;
-            }
-        }
-        if(y < 1 || y >2){
-            return false;
-        }
-        if(y == 2 && (!hatDachgeschoss || !grundrissWunschSechs)){
-            return false;
-        }
-        for(int current: ausgewaehlteSw){
+        for (int current : ausgewaehlteSw) {
             switch (current) {
+                case 1:
+                    wunschEins = true;
+                    break;
+                case 2:
+                    wunschZwei = true;
+                    break;
+                case 3:
+                    wunschDrei = true;
+                    break;
                 case 4:
                     wunschVier = true;
                     break;
@@ -85,10 +76,38 @@ public final class HeizungControl {
                     break;
             }
         }
-        if(wunschVier && hatDachgeschoss){
+        int anzahlHeizkoerper = getAnzahlHeizkoerper();
+        if (wunschEins) {
+            if (x < 1 || x > 5) {
+                return false;
+            }
+        }
+        if (wunschZwei) {
+            if (z < 1 || z > x + anzahlHeizkoerper) {
+                return false;
+            }
+        }
+        //TODO: Placeholder bis es tatsächlich Grundisssonderwünsche gibt
+        int[] grundrissSw = {1, 6};
+        boolean grundrissWunschSechs = false;
+        for (Integer current : grundrissSw) {
+            if (current == 6) {
+                grundrissWunschSechs = true;
+                break;
+            }
+        }
+        if (wunschDrei) {
+            if (y < 1 || y > 2) {
+                return false;
+            }
+            if (y == 2 && (!hatDachgeschoss || !grundrissWunschSechs)) {
+                return false;
+            }
+        }
+        if (wunschVier && hatDachgeschoss) {
             return false;
         }
-        if(wunschFuenf && !hatDachgeschoss){
+        if (wunschFuenf && !hatDachgeschoss) {
             return false;
         }
         return true;
