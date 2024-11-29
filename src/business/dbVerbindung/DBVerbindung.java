@@ -134,11 +134,11 @@ public class DBVerbindung
     }
 
     /**
-     * Reads all extra wishes of a given customer for a given category.
+     * Liest die Extrawünsche eines gegebenen Kunden für eine gegebene Kategorie
      *
-     * @param customerNumber - the given customer number
-     * @param wishCategory - the given category. should be 1-8
-     * @return - all wunschoption_ids for the given category, that the customer requested.
+     * @param customerNumber - die gegebene Kundennummer
+     * @param wishCategory - die gegebene Kategorie. Wertebereich 1-8
+     * @return - Alle wunschoption_ids, die der mit dem Haus des Kunden assoziiert werden.
      */
     public int[] executeSelectCustomerWishes(int customerNumber, int wishCategory) {
         // SQL query to fetch the IDs of Wunschoption
