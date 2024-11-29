@@ -40,6 +40,9 @@ public final class FensterAussentuerControl {
     	this.connection = DBVerbindung.getInstance();
     	return connection.executeSelectNameAndPrice("Wunschoption", 2);
     }
+    public void berechnePreis() {
+    	
+    }
 
     /**
      * Validates the given combination of extra wishes
