@@ -143,4 +143,31 @@ public class DBVerbindung
         }
         return instance;
     }
+    
+    
+    
+    private void InsetSonderwunsch(String beschreibung, int preis, int kategorienr){
+        try {
+            PreparedStatement stm = connection.prepareStatement("INSERT INTO `sonderwunsch` (`beschreibung`, `preis`, `kategorienr`) VALUES (?, ?, ?)");
+            stm.setString(1, beschreibung);
+            stm.setInt(2, preis);
+            stm.setInt(3, kategorienr);
+            stm.execute();
+        } catch (SQLException e) {
+            //System.out.println("SQL Exception: " + e.getMessage());
+        }
+    }
+    
+    
+    public void InsertSonderwuensche(){
+        //Grundriss-Varianten
+        InsetSonderwunsch("Wand zur Abtrennung der Küche von dem Essbereich", 300, 1);
+        InsetSonderwunsch("Tür in der Wand zwischen Küche und Essbereich", 300, 1);
+        InsetSonderwunsch("Großes Zimmer im OG statt zwei kleinen Zimmern", 0, 1);
+        InsetSonderwunsch("Abgetrennter Treppenraum im DG", 890, 1);
+        InsetSonderwunsch("Vorrichtung eines Bades im DG", 990, 1);
+        InsetSonderwunsch("Ausführung eines Bades im DG", 8990, 1);
+   
+
+    }
 }

@@ -1,5 +1,8 @@
 package gui.grundriss;
 
+import java.util.ArrayList;
+
+import business.grundriss.Grundriss;
 import gui.basis.BasisView;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -12,7 +15,7 @@ public class GrundrissView extends BasisView{
  
  	// das Control-Objekt des Grundriss-Fensters
 	private GrundrissControl grundrissControl;
-    private String[][] sonderwuensche;
+    private ArrayList<Grundriss> sonderwuensche;
  // --- Anfang Attribute der grafischen Oberfläche ---
     private Label[] lblPlatzhalter = new Label[6]; // Array für Labels
     private TextField[] txtPreisPlatzhalter = new TextField[6]; // Array für Textfelder
@@ -42,11 +45,11 @@ public class GrundrissView extends BasisView{
 
         // Initialisieren der Arrays mit den entsprechenden Elementen
         for (int i = 0; i < 6; i++) {
-            lblPlatzhalter[i] = new Label(sonderwuensche[i][0]);
+            //lblPlatzhalter[i] = new Label(sonderwuensche[i][0]);
             txtPreisPlatzhalter[i] = new TextField();
             lblPlatzhalterEuro[i] = new Label("Euro");
             chckBxPlatzhalter[i] = new CheckBox();
-		txtPreisPlatzhalter[i].setText(sonderwuensche[i][1]);
+	//	txtPreisPlatzhalter[i].setText(sonderwuensche[i][1]);
 
             // Setze Textfelder auf nicht editierbar
             txtPreisPlatzhalter[i].setEditable(false);
@@ -65,7 +68,7 @@ public class GrundrissView extends BasisView{
 		super.oeffneBasisView();
 	}
     
-    private String[][] leseGrundrissSonderwuensche(){
+    private ArrayList<Grundriss> leseGrundrissSonderwuensche(){
     	return this.grundrissControl.leseGrundrissSonderwuensche();
     }
     
