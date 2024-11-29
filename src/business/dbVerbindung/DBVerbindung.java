@@ -169,6 +169,26 @@ public class DBVerbindung
         return ids.stream().mapToInt(i -> i).toArray();
     }
 
+    public void saveCustomerWishes(int hausNummer, List<Integer> selectedWunschoptionIds) {
+        // Prepare the SQL for inserting data with duplicate key handling
+        String insertSql = "INSERT INTO Wunschoption_haus (wunschoption_id, hausnummer) VALUES (?, ?) " +
+                "ON DUPLICATE KEY UPDATE wunschoption_id = wunschoption_id";
+
+        try (PreparedStatement stmt = connection.prepareStatement(insertSql)) {
+            for (int wunschoptionId : selectedWunschoptionIds) {
+                stmt.setInt(1, wunschoptionId);
+                stmt.setInt(2, hausNummer);
+                stmt.addBatch();
+            }
+            stmt.executeBatch(); // Execute all the insertions as a batch
+
+            System.out.println("Customer wishes saved successfully.");
+
+        } catch (SQLException e) {
+            System.err.println("Error while saving customer wishes: " + e.getMessage());
+        }
+    }
+
     public static DBVerbindung getInstance() {
         if (instance == null) { // Instanz wird nur erstellt, wenn sie nicht existiert
             synchronized (DBVerbindung.class) { // Thread-Sicherheit
