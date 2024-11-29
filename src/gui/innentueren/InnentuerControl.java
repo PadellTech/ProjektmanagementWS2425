@@ -52,7 +52,7 @@ public final class InnentuerControl {
     public boolean pruefeKonstellationSonderwuensche(int[] ausgewaehlteSw, int y, int z){
         boolean hatDachgeschoss = kundeModel.hatDachgeschoss();
         int anzahlTueren = getDoors();
-        if (y > anzahlTueren || z > anzahlTueren || y+z > anzahlTueren) {
+        if (y < 0 || z < 0 || y > anzahlTueren || z > anzahlTueren || y+z > anzahlTueren) {
             return false;
         }
 
