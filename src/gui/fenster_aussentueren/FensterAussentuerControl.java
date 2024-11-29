@@ -28,7 +28,7 @@ public final class FensterAussentuerControl {
         this.kundeModel = kundeModel;
         this.connection = connection;
     }
-
+ 
     /**
      * macht das FensterAussentuerView-Objekt sichtbar.
      */
@@ -39,6 +39,9 @@ public final class FensterAussentuerControl {
     public String[][] leseFensterAussentuerSonderwuensche(){
     	this.connection = DBVerbindung.getInstance();
     	return connection.executeSelectNameAndPrice("Wunschoption", 2);
+    }
+    public void berechnePreis() {
+    	
     }
 
     /**
