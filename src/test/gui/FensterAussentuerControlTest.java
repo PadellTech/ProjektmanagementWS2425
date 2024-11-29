@@ -5,11 +5,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import gui.fenster_aussentueren.FensterAussentuerControl;
+import gui.kunde.KundeControl;
+import javafx.stage.Stage;
+import business.dbVerbindung.DBVerbindung;
+import business.kunde.Kunde;
 import business.kunde.KundeModel;
 
 class FensterAussentuerControlTest {
     private FensterAussentuerControl faController;
-    private boolean hatDachgeschoss;
     private int[] ausgewaehlteSw_2;
     private int[] ausgewaehlteSw_7;
     private int[] ausgewaehlteSw_4_7;
@@ -20,8 +23,9 @@ class FensterAussentuerControlTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        faController = new FensterAussentuerControl();
-        hatDachgeschoss = true;
+    	DBVerbindung dbtool = new DBVerbindung();
+    	KundeModel kundeModel = KundeModel.getInstance();
+        faController = new FensterAussentuerControl(kundeModel, dbtool);
 
         // Initialize the arrays
         ausgewaehlteSw_2 = new int[] {2};
@@ -31,25 +35,16 @@ class FensterAussentuerControlTest {
         ausgewaehlteSw_5_8 = new int[] {5,8};
         ausgewaehlteSw_9 = new int[] {9};
         ausgewaehlteSw_6_9 = new int[] {6,9};
-
-        // Set up a mock KundeModel
-        setKundeModel(hatDachgeschoss);
-    }
-
-    void setKundeModel(boolean hatDachgeschossWert) throws Exception {
-        // Create a mock KundeModel
-        KundeModel mockKundeModel = KundeModel.getInstance();
+        kundeModel.setKunde(new Kunde(1, "Test", "TestN", "123456", "test"));
     }
 
     @Test
     void testPruefeKonstellationSonderwuensche() throws Exception {
         
         boolean result;
-        // Fall: DG nicht vorhanden
-        hatDachgeschoss = false;
-        setKundeModel(hatDachgeschoss);
+   
         result = faController.pruefeKonstellationSonderwuensche(ausgewaehlteSw_2);
-        assertFalse(result, "Wunsch 2 sollte ungültig sein, wenn DG nicht vorhanden ist.");
+        assertFalse(result, "Wunsch 2 sollte gültig sein, wenn DG vorhanden ist.");
 
         // Test 3.7 geht nur, wenn 3.4 ausgesucht wurde.
         // Fall: Wunsch 7 ohne Wunsch 4
