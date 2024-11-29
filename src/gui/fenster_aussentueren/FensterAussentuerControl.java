@@ -28,7 +28,7 @@ public final class FensterAussentuerControl {
         this.kundeModel = kundeModel;
         this.connection = connection;
     }
-
+ 
     /**
      * macht das FensterAussentuerView-Objekt sichtbar.
      */
