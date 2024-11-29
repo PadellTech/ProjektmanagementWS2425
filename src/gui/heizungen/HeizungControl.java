@@ -84,6 +84,9 @@ public final class HeizungControl {
             return false;
         }
         if (wunschDrei) {
+            if(kundeModel.getKunde() == null) {
+                return false;
+            }
             int[] grundrissSw = connection.executeSelectCustomerWishes(kundeModel.getKunde().getHausnummer(), 1);
             boolean grundrissWunschSechs = false;
             for (Integer current : grundrissSw) {
@@ -117,6 +120,9 @@ public final class HeizungControl {
         boolean hatDachgeschoss = kundeModel.hatDachgeschoss();
         boolean wunschDrei = false;
         boolean wunschSechs =false;
+        if(kundeModel.getKunde() == null) {
+            return 0;
+        }
         int[] grundrissSw = connection.executeSelectCustomerWishes(kundeModel.getKunde().getHausnummer(), 1);
 
         for(int current: grundrissSw){

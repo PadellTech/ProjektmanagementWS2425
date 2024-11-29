@@ -78,6 +78,9 @@ public final class FliesenControl {
                     break;
             }
         }
+        if(kundeModel.getKunde() == null){
+            return false;
+        }
         int[] grundrissSw = connection.executeSelectCustomerWishes(kundeModel.getKunde().getHausnummer(), 1);
         boolean grundrissWunschSechs = false;
         for (Integer current : grundrissSw) {
