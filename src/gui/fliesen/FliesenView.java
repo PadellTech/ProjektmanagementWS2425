@@ -39,7 +39,7 @@ public class FliesenView extends BasisView{
     /* initialisiert die Steuerelemente auf der Maske */
     protected void initKomponenten() {
         super.initKomponenten();
-        super.getLblSonderwunsch().setText("Heizungs-Varianten");
+        super.getLblSonderwunsch().setText("Fliesen-Varianten");
 
         // Initialisieren der Arrays mit den entsprechenden Elementen
         for (int i = 0; i < 6; i++) {
