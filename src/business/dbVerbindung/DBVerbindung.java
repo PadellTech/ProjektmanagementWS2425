@@ -6,7 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DBVerbindung 
 {
@@ -168,6 +170,53 @@ public class DBVerbindung
         // Convert the list of IDs to an int array
         return ids.stream().mapToInt(i -> i).toArray();
     }
+
+    // Method to save the selected wishes in the database
+    public void saveCustomerWishes(int hausNummer, int[] selectedWunschoptionIds) {
+        // Prepare the SQL for inserting data with duplicate key handling
+        String insertSql = "INSERT INTO Wunschoption_haus (wunschoption_id, hausnummer) VALUES (?, ?) " +
+                "ON DUPLICATE KEY UPDATE wunschoption_id = wunschoption_id";
+
+        try (PreparedStatement stmt = connection.prepareStatement(insertSql)) {
+            for (int wunschoptionId : selectedWunschoptionIds) {
+                stmt.setInt(1, wunschoptionId);
+                stmt.setInt(2, hausNummer);
+                stmt.addBatch();
+            }
+            stmt.executeBatch(); // Execute all the insertions as a batch
+
+            System.out.println("Customer wishes saved successfully.");
+
+        } catch (SQLException e) {
+            System.err.println("Error while saving customer wishes: " + e.getMessage());
+        }
+    }
+
+
+    /**
+     * This method retrieves a map of the names of the wishes to their corresponding wunschoption_ids
+     */
+    public Map<String, Integer> getWunschoptionIdByName() {
+        Map<String, Integer> nameToIdMap = new HashMap<>();
+
+        String query = "SELECT wunschoption_id, name FROM Wunschoption";
+
+        try (PreparedStatement stmt = connection.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            while (rs.next()) {
+                int wunschoptionId = rs.getInt("wunschoption_id");
+                String name = rs.getString("name");
+                nameToIdMap.put(name, wunschoptionId);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return nameToIdMap;
+    }
+
+
 
     public static DBVerbindung getInstance() {
         if (instance == null) { // Instanz wird nur erstellt, wenn sie nicht existiert

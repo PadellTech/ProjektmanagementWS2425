@@ -95,11 +95,15 @@ public final class InnentuerControl {
      * @return - Die Anzahl der Innentüren
      */
     private int getDoors(){
+        if(kundeModel.getKunde() == null){
+            return 0;
+        }
         boolean hatDachgeschoss = kundeModel.hatDachgeschoss();
         boolean wunschZwei = false;
         boolean wunschDrei = false;
         boolean wunschVier = false;
         boolean wunschSechs =false;
+
         int[] grundrissSw = connection.executeSelectCustomerWishes(kundeModel.getKunde().getHausnummer(),1);
         for(int current: grundrissSw){
             switch (current){
