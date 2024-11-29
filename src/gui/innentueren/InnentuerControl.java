@@ -51,17 +51,34 @@ public final class InnentuerControl {
      */
     public boolean pruefeKonstellationSonderwuensche(int[] ausgewaehlteSw, int y, int z){
         boolean hatDachgeschoss = kundeModel.hatDachgeschoss();
+        boolean wunschEins = false;
+        boolean wunschZwei = false;
+        boolean wunschDrei = false;
         int anzahlTueren = getDoors();
-        if (y < 0 || z < 0 || y > anzahlTueren || z > anzahlTueren || y+z > anzahlTueren) {
+
+        for(int current: ausgewaehlteSw) {
+            switch (current) {
+                case 1:
+                    wunschEins = true;
+                    break;
+                case 2:
+                    wunschZwei = true;
+                    break;
+                case 3:
+                    wunschDrei = true;
+                    break;
+            }
+        }
+
+        if(wunschEins && (y < 1 || y > anzahlTueren)) {
+            return false;
+        }
+        if(wunschZwei && (z < 1 || z > anzahlTueren)){
             return false;
         }
 
-        boolean wunschDrei = false;
-        for(int current: ausgewaehlteSw){
-            if (current == 3) {
-                wunschDrei = true;
-                break;
-            }
+        if (wunschEins && wunschZwei && (y+z > anzahlTueren)) {
+            return false;
         }
         if(wunschDrei && !hatDachgeschoss){
             return false;

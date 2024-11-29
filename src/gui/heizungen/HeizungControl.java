@@ -77,26 +77,22 @@ public final class HeizungControl {
             }
         }
         int anzahlHeizkoerper = getAnzahlHeizkoerper();
-        if (wunschEins) {
-            if (x < 1 || x > 5) {
-                return false;
-            }
+        if (wunschEins && (x < 1 || x > 5)) {
+            return false;
         }
-        if (wunschZwei) {
-            if (z < 1 || z > x + anzahlHeizkoerper) {
-                return false;
-            }
+        if (wunschZwei && (z < 1 || z > x + anzahlHeizkoerper)) {
+            return false;
         }
         //TODO: Placeholder bis es tatsächlich Grundisssonderwünsche gibt
-        int[] grundrissSw = {1, 6};
-        boolean grundrissWunschSechs = false;
-        for (Integer current : grundrissSw) {
-            if (current == 6) {
-                grundrissWunschSechs = true;
-                break;
-            }
-        }
         if (wunschDrei) {
+            int[] grundrissSw = {1, 6};
+            boolean grundrissWunschSechs = false;
+            for (Integer current : grundrissSw) {
+                if (current == 6) {
+                    grundrissWunschSechs = true;
+                    break;
+                }
+            }
             if (y < 1 || y > 2) {
                 return false;
             }
