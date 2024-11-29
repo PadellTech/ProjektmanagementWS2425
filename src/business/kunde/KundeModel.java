@@ -120,7 +120,9 @@ public final class KundeModel {
 		}
 		return true;
 	}
-	
+	public Kunde getKunde() {
+		return this.kunde;
+  }
 	public void setKunde(Kunde k) {
 		this.kunde = k;
 	}

@@ -5,13 +5,15 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DBVerbindung 
 {
 	private static DBVerbindung instance; // Singleton-Instanz
 	private String host, port, databaseName, userName, password, sslMode, connectionUrl;
 	private Connection connection;
-	
+
 	public DBVerbindung() {
 		this.host = "mysql-37c915f9-hamzaouialae5-2638.g.aivencloud.com";
 		this.port = "13365";
@@ -131,7 +133,41 @@ public class DBVerbindung
         return executeSelect(sql, "name", "preis");
     }
 
+    /**
+     * Liest die Extrawünsche eines gegebenen Kunden für eine gegebene Kategorie
+     *
+     * @param customerNumber - die gegebene Kundennummer
+     * @param wishCategory - die gegebene Kategorie. Wertebereich 1-8
+     * @return - Alle wunschoption_ids, die der mit dem Haus des Kunden assoziiert werden.
+     */
+    public int[] executeSelectCustomerWishes(int customerNumber, int wishCategory) {
+        // SQL query to fetch the IDs of Wunschoption
+        String sql = "SELECT w.wunschoption_id " +
+                "FROM Kunde k " +
+                "JOIN Haus h ON k.hausnummer = h.hausnummer " +
+                "JOIN Wunschoption_haus wh ON h.hausnummer = wh.hausnummer " +
+                "JOIN Wunschoption w ON wh.wunschoption_id = w.wunschoption_id " +
+                "WHERE k.kundennummer = ? AND w.wunsch_id = ?";
 
+        List<Integer> ids = new ArrayList<>();
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            // Setting the parameters for the prepared statement
+            stmt.setInt(1, customerNumber);
+            stmt.setInt(2, wishCategory);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                // Loop through the result set and add each Wunschoption ID to the list
+                while (rs.next()) {
+                    ids.add(rs.getInt("wunschoption_id"));
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Fehler beim Abrufen der Wunschoptionen: " + e.getMessage());
+        }
+        // Convert the list of IDs to an int array
+        return ids.stream().mapToInt(i -> i).toArray();
+    }
 
     public static DBVerbindung getInstance() {
         if (instance == null) { // Instanz wird nur erstellt, wenn sie nicht existiert

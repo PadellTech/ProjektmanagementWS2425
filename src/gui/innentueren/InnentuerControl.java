@@ -54,17 +54,34 @@ public final class InnentuerControl {
      */
     public boolean pruefeKonstellationSonderwuensche(int[] ausgewaehlteSw, int y, int z){
         boolean hatDachgeschoss = kundeModel.hatDachgeschoss();
+        boolean wunschEins = false;
+        boolean wunschZwei = false;
+        boolean wunschDrei = false;
         int anzahlTueren = getDoors();
-        if (y > anzahlTueren || z > anzahlTueren || y+z > anzahlTueren) {
+
+        for(int current: ausgewaehlteSw) {
+            switch (current) {
+                case 1:
+                    wunschEins = true;
+                    break;
+                case 2:
+                    wunschZwei = true;
+                    break;
+                case 3:
+                    wunschDrei = true;
+                    break;
+            }
+        }
+
+        if(wunschEins && (y < 1 || y > anzahlTueren)) {
+            return false;
+        }
+        if(wunschZwei && (z < 1 || z > anzahlTueren)){
             return false;
         }
 
-        boolean wunschDrei = false;
-        for(int current: ausgewaehlteSw){
-            if (current == 3) {
-                wunschDrei = true;
-                break;
-            }
+        if (wunschEins && wunschZwei && (y+z > anzahlTueren)) {
+            return false;
         }
         if(wunschDrei && !hatDachgeschoss){
             return false;
@@ -83,8 +100,7 @@ public final class InnentuerControl {
         boolean wunschDrei = false;
         boolean wunschVier = false;
         boolean wunschSechs =false;
-        //TODO: Placeholder bis es tatsächlich Grundisssonderwünsche gibt
-        int[] grundrissSw = {1,2,3,4,5,6};
+        int[] grundrissSw = connection.executeSelectCustomerWishes(kundeModel.getKunde().getHausnummer(),1);
         for(int current: grundrissSw){
             switch (current){
                 case 2:

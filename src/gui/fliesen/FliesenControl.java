@@ -49,8 +49,6 @@ public final class FliesenControl {
      */
     public boolean pruefeKonstellationSonderwuensche(int[] ausgewaehlteSw){
         boolean hatDachgeschoss = kundeModel.hatDachgeschoss();
-        //TODO: Placeholder da leseGrundrisssonderwuensche noch nicht implementiert
-        boolean grundrissSw = false;
         boolean wunschEins = false;
         boolean wunschZwei = false;
         boolean wunschDrei = false;
@@ -80,13 +78,21 @@ public final class FliesenControl {
                     break;
             }
         }
+        int[] grundrissSw = connection.executeSelectCustomerWishes(kundeModel.getKunde().getHausnummer(), 1);
+        boolean grundrissWunschSechs = false;
+        for (Integer current : grundrissSw) {
+            if (current == 6) {
+                grundrissWunschSechs = true;
+                break;
+            }
+        }
         if(wunschDrei && wunschEins){
             return false;
         }
         if(wunschVier && wunschZwei){
             return false;
         }
-        if(wunschFuenf && (!hatDachgeschoss || !grundrissSw)){
+        if(wunschFuenf && (!hatDachgeschoss || !grundrissWunschSechs)){
             return false;
         }
         if(wunschSechs && !wunschFuenf){
