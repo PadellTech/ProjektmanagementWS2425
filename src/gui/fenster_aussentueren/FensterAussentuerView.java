@@ -112,8 +112,8 @@ public class FensterAussentuerView extends BasisView{
                 }
             }
         }
-        if (!fatControl.pruefeKonstellationSonderwuensche(ausgewaehlteSonderwuensche)) {
-            this.fatControl.speichereSonderwuensche(ausgewaehlteSonderwuensche, 23);
+        if (fatControl.pruefeKonstellationSonderwuensche(ausgewaehlteSonderwuensche)) {
+            this.fatControl.speichereSonderwuensche(ausgewaehlteSonderwuensche);
         }
         else {
         	System.out.println("Kombination ungueltig");

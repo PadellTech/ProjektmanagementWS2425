@@ -146,8 +146,8 @@ public class SanitaerView extends BasisView{
                 }
             }
         }
-        if (!sanitaerControl.pruefeKonstellationSonderwuensche(ausgewaehlteSonderwuensche)) {
-            this.sanitaerControl.speichereSonderwuensche(ausgewaehlteSonderwuensche, 23);
+        if (sanitaerControl.pruefeKonstellationSonderwuensche(ausgewaehlteSonderwuensche)) {
+            this.sanitaerControl.speichereSonderwuensche(ausgewaehlteSonderwuensche);
         }
         else {
         	System.out.println("Kombination ungueltig");

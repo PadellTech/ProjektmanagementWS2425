@@ -28,9 +28,14 @@ public final class FliesenControl {
         this.kundeModel = kundeModel;
         this.connection = connection;
     }
-    public void speichereSonderwuensche(int[] sonderwunsch_id, int hausnummer)
+    public void speichereSonderwuensche(int[] sonderwunsch_id)
     {
-    	connection.speichereSonderwuensche(sonderwunsch_id, hausnummer);
+    	try {
+    	connection.speichereSonderwuensche(sonderwunsch_id,kundeModel.getKunde().getHausnummer());
+    	} catch(Exception e)
+    	{
+    		this.fliesenView.Fehlermeldung("Es wurde kein Kunde ausgewaehlt");
+    	}
     }
 
     /**

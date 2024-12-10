@@ -147,8 +147,8 @@ public class GrundrissView extends BasisView{
                 }
             }
         }
-        if (!grundrissControl.pruefeKonstellationSonderwuensche(ausgewaehlteSonderwuensche)) {
-            this.grundrissControl.speichereSonderwuensche(ausgewaehlteSonderwuensche, 23);
+        if (grundrissControl.pruefeKonstellationSonderwuensche(ausgewaehlteSonderwuensche)) {
+            this.grundrissControl.speichereSonderwuensche(ausgewaehlteSonderwuensche);
         }
         else {
         	System.out.println("Kombination ungueltig");

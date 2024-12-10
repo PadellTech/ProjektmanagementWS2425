@@ -197,7 +197,6 @@ public class DBVerbindung
         this.executeUpdate(sql.toString());
     }
 
-
     /**
      * This method retrieves a map of the names of the wishes to their corresponding wunschoption_ids
      */

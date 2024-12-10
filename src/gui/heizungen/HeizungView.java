@@ -149,7 +149,7 @@ public class HeizungView extends BasisView{
                 }
             }
         }
-        this.heizungControl.speichereSonderwuensche(ausgewaehlteSonderwuensche, 23);
+        this.heizungControl.speichereSonderwuensche(ausgewaehlteSonderwuensche);
     }
 
 }

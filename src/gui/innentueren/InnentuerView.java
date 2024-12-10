@@ -24,7 +24,7 @@ public class InnentuerView extends BasisView{
     private Label[] lblPlatzhalter = new Label[5]; // Array für Labels
     private TextField[] txtPreisPlatzhalter = new TextField[5]; // Array für Textfelder
     private Label[] lblPlatzhalterEuro = new Label[5]; // Array für Euro Labels
-    private CheckBox[] chckBxPlatzhalter = new CheckBox[5]; // Array für Checkboxes
+    private CheckBox[] chckBxPlatzhalter = new CheckBox[3]; // Array für Checkboxes
     //-------Ende Attribute der grafischen Oberflaeche-------
 
     /**
@@ -150,8 +150,8 @@ public class InnentuerView extends BasisView{
                 }
             }
         }
-        if (!innentuerControl.pruefeKonstellationSonderwuensche(ausgewaehlteSonderwuensche, index, index)) { //To Do, Argumente anpassen
-            this.innentuerControl.speichereSonderwuensche(ausgewaehlteSonderwuensche, 23);
+        if (innentuerControl.pruefeKonstellationSonderwuensche(ausgewaehlteSonderwuensche, index, index)) { //To Do, Argumente anpassen
+            this.innentuerControl.speichereSonderwuensche(ausgewaehlteSonderwuensche);
         }
         else {
         	System.out.println("Kombination ungueltig");

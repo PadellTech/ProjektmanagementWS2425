@@ -20,9 +20,7 @@ public class Main extends Application {
 			e1.printStackTrace();
 		}
 		new KundeControl(primaryStage, dbtool);
-		dbtool.executeSelect("SELECT * FROM Kunde;");
-		dbtool.executeSelect("select * from Wunschoption_haus");
-		
+		dbtool.executeSelect("SELECT * FROM Kunde;");	
 	}	
 	
 	public static void main(String[] args) 

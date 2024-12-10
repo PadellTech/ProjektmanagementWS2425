@@ -5,7 +5,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import business.kunde.*;
 
 /**
  * Klasse, welche die Basis fuer die Fenster zu den Sonderwuenschen bereitstellt.
@@ -70,6 +72,28 @@ public abstract class BasisView {
   	protected Label getLblSonderwunsch() {
   		return lblSonderwunsch;
   	}
+    public void Fehlermeldung(String meldung) {
+        Stage meldungFenster = new Stage();
+        meldungFenster.initModality(Modality.APPLICATION_MODAL); // Modalität einstellen
+        meldungFenster.setTitle("Fehlermeldung");
+        
+        Label lblmeldung = new Label(meldung);
+        lblmeldung.setStyle("-fx-font-size: 16px; -fx-padding: 10px;");
+        
+        Button btnSchliessen = new Button("Schließen");
+        btnSchliessen.setOnAction(e -> meldungFenster.close());
+        
+        // Layout für das Fenster
+        VBox vbox = new VBox(10, lblmeldung, btnSchliessen);
+        vbox.setStyle("-fx-padding: 20px; -fx-alignment: center;");
+        
+        // Szene erstellen und zum Fenster hinzufügen
+        Scene scene = new Scene(vbox, 800, 200);
+        meldungFenster.setScene(scene);
+        
+        // Fenster anzeigen
+        meldungFenster.showAndWait();
+    }
   	
   	/*
   	 * macht das BasisView-Objekt sichtbar.
@@ -83,8 +107,6 @@ public abstract class BasisView {
   	
    	/* speichert die ausgesuchten Sonderwuensche in der Datenbank ab */
   	protected abstract void speichereSonderwuensche();
-  	
- 	
 }
 
 

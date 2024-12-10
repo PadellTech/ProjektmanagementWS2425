@@ -109,4 +109,15 @@ public class KundeControl {
                 "Unbekannter Fehler");
     	}
     }
+    public void loescheKunden(int hausnummer){
+        // Erstelle das SQL-DELETE Statement, um den Kunden mit der angegebenen Hausnummer zu löschen
+        String sql = "DELETE FROM Kunde WHERE hausnummer = "+hausnummer+";";
+        
+        // Führe das DELETE Statement aus, indem die Hausnummer als Parameter übergeben wird
+        this.connection.executeUpdate(sql);
+    }
+    public void aendereKunden(String sql) {
+    	this.connection.executeUpdate(sql);
+    }
+
 }

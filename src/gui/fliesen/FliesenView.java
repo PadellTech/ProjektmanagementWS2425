@@ -146,8 +146,8 @@ public class FliesenView extends BasisView{
                 }
             }
         }
-        if (!fliesenControl.pruefeKonstellationSonderwuensche(ausgewaehlteSonderwuensche)) {
-            this.fliesenControl.speichereSonderwuensche(ausgewaehlteSonderwuensche, 23);
+        if (fliesenControl.pruefeKonstellationSonderwuensche(ausgewaehlteSonderwuensche)) {
+            this.fliesenControl.speichereSonderwuensche(ausgewaehlteSonderwuensche);
         }
         else {
         	System.out.println("Kombination ungueltig");
