@@ -28,6 +28,10 @@ public final class FliesenControl {
         this.kundeModel = kundeModel;
         this.connection = connection;
     }
+    public void speichereSonderwuensche(int[] sonderwunsch_id, int hausnummer)
+    {
+    	connection.speichereSonderwuensche(sonderwunsch_id, hausnummer);
+    }
 
     /**
      * macht das FliesenView-Objekt sichtbar.

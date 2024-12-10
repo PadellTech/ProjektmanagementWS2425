@@ -20,7 +20,7 @@ public class SanitaerView extends BasisView{
     private Label[] lblPlatzhalter = new Label[5]; // Array für Labels
     private TextField[] txtPreisPlatzhalter = new TextField[5]; // Array für Textfelder
     private Label[] lblPlatzhalterEuro = new Label[5]; // Array für Euro Labels
-    private CheckBox[] chckBxPlatzhalter = new CheckBox[5]; // Array für Checkboxes
+    private CheckBox[] chckBxPlatzhalter = new CheckBox[4]; // Array für Checkboxes
     //-------Ende Attribute der grafischen Oberflaeche-------
 
     /**
@@ -120,16 +120,38 @@ public class SanitaerView extends BasisView{
 
     /* speichert die ausgesuchten Sonderwuensche in der Datenbank ab */
     protected void speichereSonderwuensche(){
-        //TODO: placeholder array since we dont have prober storage off extra wishes atm.
-        //TODO: Modify when the other dudes have established a database connection and storing of wishes is finalised.
-        int[] ph = {1,2,3,4,5};
-        if (!sanitaerControl.pruefeKonstellationSonderwuensche(ph)) {
-            return;
+        // Zählen der ausgewählten Checkboxen, um die Größe des Arrays festzulegen
+        int count = 0;
+        for (CheckBox checkBox : chckBxPlatzhalter) {
+            if (checkBox.isSelected()) {
+                count++;
+            }
         }
 
+        // Erstellen eines Arrays der richtigen Größe
+        int[] ausgewaehlteSonderwuensche = new int[count];
+        int index = 0;
 
-        // Es wird erst die Methode pruefeKonstellationSonderwuensche(int[] ausgewaehlteSw)
-        // aus dem Control aufgerufen, dann die Sonderwuensche gespeichert.
+        // Hinzufügen der IDs der ausgewählten Sonderwünsche in das Array
+        for (int i = 0; i < chckBxPlatzhalter.length; i++) {
+            if (chckBxPlatzhalter[i].isSelected()) {
+                try {
+                    // Die Sonderwunsch-ID wird aus dem zweidimensionalen Array `sonderwuensche` gelesen
+                    int sonderwunschId = Integer.parseInt(sonderwuensche[i][2]); // Annahme: Spalte 2 enthält die ID
+                    ausgewaehlteSonderwuensche[index] = sonderwunschId;
+                    index++;
+                } catch (NumberFormatException e) {
+                    // Falls eine ungültige ID vorhanden ist, wird sie ignoriert
+                    System.err.println("Ungültige ID für Sonderwunsch an Position " + i + ": " + sonderwuensche[i][2]);
+                }
+            }
+        }
+        if (!sanitaerControl.pruefeKonstellationSonderwuensche(ausgewaehlteSonderwuensche)) {
+            this.sanitaerControl.speichereSonderwuensche(ausgewaehlteSonderwuensche, 23);
+        }
+        else {
+        	System.out.println("Kombination ungueltig");
+        }
     }
 
 

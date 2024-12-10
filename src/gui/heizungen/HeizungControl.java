@@ -39,6 +39,10 @@ public final class HeizungControl {
     	this.connection = DBVerbindung.getInstance();
     	return connection.executeSelectNameAndPrice("Wunschoption", 4);
     }
+    public void speichereSonderwuensche(int[] sonderwunsch_id, int hausnummer)
+    {
+    	connection.speichereSonderwuensche(sonderwunsch_id, hausnummer);
+    }
 
     /**
      * Validiert die Sonderwünsche zu Heizkoerpern

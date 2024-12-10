@@ -43,6 +43,10 @@ public final class InnentuerControl {
     	this.connection = DBVerbindung.getInstance();
     	return connection.executeSelectNameAndPrice("Wunschoption", 3);
     }
+    public void speichereSonderwuensche(int[] sonderwunsch_id, int hausnummer)
+    {
+    	connection.speichereSonderwuensche(sonderwunsch_id, hausnummer);
+    }
 
     /**
      * Validiert die Sonderwünsche zu Innentueren

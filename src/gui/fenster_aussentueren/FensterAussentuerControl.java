@@ -43,6 +43,10 @@ public final class FensterAussentuerControl {
     public void berechnePreis() {
     	
     }
+    public void speichereSonderwuensche(int[] sonderwunsch_id, int hausnummer)
+    {
+    	connection.speichereSonderwuensche(sonderwunsch_id, hausnummer);
+    }
 
     /**
      * Validates the given combination of extra wishes

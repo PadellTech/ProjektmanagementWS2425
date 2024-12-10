@@ -42,4 +42,8 @@ public final class GrundrissControl {
 	public boolean pruefeKonstellationSonderwuensche(int[] ausgewaehlteSw){
 		return true;
 	}
+    public void speichereSonderwuensche(int[] sonderwunsch_id, int hausnummer)
+    {
+    	connection.speichereSonderwuensche(sonderwunsch_id, hausnummer);
+    }
 }

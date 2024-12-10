@@ -39,6 +39,14 @@ public class FensterAussentuerView extends BasisView{
         fatStage.setTitle("Sonderwünsche zu Fenster und Aussentüren-Varianten");
         sonderwuensche = this.leseFensterAussentuerSonderwuensche();
         this.initKomponenten();
+     // Durchlaufen des 2-dimensionalen Arrays 'sonderwuensche'
+        for (int i = 0; i < sonderwuensche.length; i++) { // Äußere Schleife für Zeilen
+            System.out.println("Zeile " + i + ":");
+            for (int j = 0; j < sonderwuensche[i].length; j++) { // Innere Schleife für Spalten
+                System.out.println("   Spalte " + j + ": " + sonderwuensche[i][j]);
+            }
+        }
+
         
     }
 
@@ -78,11 +86,37 @@ public class FensterAussentuerView extends BasisView{
     }
     /* speichert die ausgesuchten Sonderwuensche in der Datenbank ab */
     protected void speichereSonderwuensche(){
-        //TODO: placeholder array since we dont have prober storage off extra wishes atm.
-        //TODO: Modify when the other dudes have established a database connection and storing of wishes is finalised.
-        int[] ph = {1,2,3,4,5};
-        if (!fatControl.pruefeKonstellationSonderwuensche(ph)) {
-            return;
+        // Zählen der ausgewählten Checkboxen, um die Größe des Arrays festzulegen
+        int count = 0;
+        for (CheckBox checkBox : chckBxPlatzhalter) {
+            if (checkBox.isSelected()) {
+                count++;
+            }
+        }
+
+        // Erstellen eines Arrays der richtigen Größe
+        int[] ausgewaehlteSonderwuensche = new int[count];
+        int index = 0;
+
+        // Hinzufügen der IDs der ausgewählten Sonderwünsche in das Array
+        for (int i = 0; i < chckBxPlatzhalter.length; i++) {
+            if (chckBxPlatzhalter[i].isSelected()) {
+                try {
+                    // Die Sonderwunsch-ID wird aus dem zweidimensionalen Array `sonderwuensche` gelesen
+                    int sonderwunschId = Integer.parseInt(sonderwuensche[i][2]); // Annahme: Spalte 2 enthält die ID
+                    ausgewaehlteSonderwuensche[index] = sonderwunschId;
+                    index++;
+                } catch (NumberFormatException e) {
+                    // Falls eine ungültige ID vorhanden ist, wird sie ignoriert
+                    System.err.println("Ungültige ID für Sonderwunsch an Position " + i + ": " + sonderwuensche[i][2]);
+                }
+            }
+        }
+        if (!fatControl.pruefeKonstellationSonderwuensche(ausgewaehlteSonderwuensche)) {
+            this.fatControl.speichereSonderwuensche(ausgewaehlteSonderwuensche, 23);
+        }
+        else {
+        	System.out.println("Kombination ungueltig");
         }
 
 
