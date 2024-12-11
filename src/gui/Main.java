@@ -20,11 +20,7 @@ public class Main extends Application {
 			e1.printStackTrace();
 		}
 		new KundeControl(primaryStage, dbtool);
-		dbtool.executeUpdate("INSERT INTO Kunde (kundennummer, hausnummer, vorname, nachname, telefonnummer, email) " +"VALUES (3, 20, 'Max', 'Mustermann', '0123456789', 'max.mustermann@example.com');");
-		dbtool.executeSelect("SELECT * FROM Kunde;");
-		dbtool.executeSelect("SELECT * FROM Sonderwunschkategorie;");
-		dbtool.executeSelect("SELECT * FROM Wunschoption;");
-		
+		dbtool.executeSelect("SELECT * FROM Kunde;");	
 	}	
 	
 	public static void main(String[] args) 

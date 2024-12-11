@@ -131,8 +131,8 @@ public class DBVerbindung
     }
 
     public String[][] executeSelectNameAndPrice(String tableName, int filter) {
-        String sql = "SELECT name, preis FROM " + tableName + " where wunsch_id = "+filter;
-        return executeSelect(sql, "name", "preis");
+        String sql = "SELECT name, preis, wunschoption_id FROM " + tableName + " where wunsch_id = "+filter;
+        return executeSelect(sql, "name", "preis", "wunschoption_id");
     }
 
     /**
@@ -172,26 +172,30 @@ public class DBVerbindung
     }
 
     // Method to save the selected wishes in the database
-    public void saveCustomerWishes(int hausNummer, int[] selectedWunschoptionIds) {
-        // Prepare the SQL for inserting data with duplicate key handling
-        String insertSql = "INSERT INTO Wunschoption_haus (wunschoption_id, hausnummer) VALUES (?, ?) " +
-                "ON DUPLICATE KEY UPDATE wunschoption_id = wunschoption_id";
-
-        try (PreparedStatement stmt = connection.prepareStatement(insertSql)) {
-            for (int wunschoptionId : selectedWunschoptionIds) {
-                stmt.setInt(1, wunschoptionId);
-                stmt.setInt(2, hausNummer);
-                stmt.addBatch();
-            }
-            stmt.executeBatch(); // Execute all the insertions as a batch
-
-            System.out.println("Customer wishes saved successfully.");
-
-        } catch (SQLException e) {
-            System.err.println("Error while saving customer wishes: " + e.getMessage());
+    public void speichereSonderwuensche(int[] sonderwunsch_id, int hausnummer)
+    {
+        // Überprüfen, ob das Array leer ist
+        if (sonderwunsch_id == null || sonderwunsch_id.length == 0) {
+            System.out.println("Keine Sonderwünsche übergeben.");
+            return;
         }
+        
+        // Erstelle den dynamischen SQL-String
+        StringBuilder sql = new StringBuilder("INSERT INTO Wunschoption_haus (wunschoption_id, hausnummer) VALUES ");
+        
+        // Füge für jede Wunschoption eine Zeile hinzu
+        for (int i = 0; i < sonderwunsch_id.length; i++) {
+            sql.append("(").append(sonderwunsch_id[i]).append(", ").append(hausnummer).append(")");
+            if (i < sonderwunsch_id.length - 1) {
+                sql.append(", "); // Komma nur zwischen den Werten, nicht am Ende
+            }
+        }
+        sql.append(";"); // Beende das SQL-Statement mit einem Semikolon
+        
+        // Debug-Ausgabe des generierten SQL-Strings
+        System.out.println("Generiertes SQL: " + sql.toString());
+        this.executeUpdate(sql.toString());
     }
-
 
     /**
      * This method retrieves a map of the names of the wishes to their corresponding wunschoption_ids

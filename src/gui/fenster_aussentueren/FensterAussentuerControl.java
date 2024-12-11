@@ -43,6 +43,15 @@ public final class FensterAussentuerControl {
     public void berechnePreis() {
     	
     }
+    public void speichereSonderwuensche(int[] sonderwunsch_id)
+    {
+    	try {
+    	connection.speichereSonderwuensche(sonderwunsch_id,kundeModel.getKunde().getHausnummer());
+    	} catch(Exception e)
+    	{
+    		this.fatView.Fehlermeldung("Es wurde kein Kunde ausgewaehlt");
+    	}
+    }
 
     /**
      * Validates the given combination of extra wishes

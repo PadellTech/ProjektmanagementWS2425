@@ -42,6 +42,15 @@ public final class SanitaerControl {
     	this.connection = DBVerbindung.getInstance();
     	return connection.executeSelectNameAndPrice("Wunschoption", 5);
     }
+    public void speichereSonderwuensche(int[] sonderwunsch_id)
+    {
+    	try {
+    	connection.speichereSonderwuensche(sonderwunsch_id,kundeModel.getKunde().getHausnummer());
+    	} catch(Exception e)
+    	{
+    		this.sanitaerView.Fehlermeldung("Es wurde kein Kunde ausgewaehlt");
+    	}
+    }
 
     /**
      * Validates the given combination of extra wishes

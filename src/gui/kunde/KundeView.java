@@ -163,9 +163,26 @@ public class KundeView{
    	}
     
   	private void aendereKunden(){
+        Kunde kunde = new Kunde(cmbBxNummerHaus.getValue() ,txtVorname.getText(), txtNachname.getText(), txtNummer.getText(), txtEmail.getText());
+        // Objekt kunde fuellen
+        
+		 if(!kundeModel.validateUser(kunde)){
+			 System.out.println("Eingabe ueberpruefen");
+			 return;
+		 }
+		    // SQL-UPDATE-Statement zum Ändern der Kundendaten
+		 String sql = "UPDATE Kunde SET vorname = '" + txtVorname.getText() + 
+	             "', nachname = '" + txtNachname.getText() +
+	             "', telefonnummer = '" + txtNummer.getText() + 
+	             "', email = '" + txtEmail.getText() + 
+	             "' WHERE hausnummer = " + cmbBxNummerHaus.getValue();
+
+		    // Rufe die Methode auf, die das SQL-Statement ausführt
+		    this.kundeControl.aendereKunden(sql);
    	}
   	
    	private void loescheKunden(){
+   		this.kundeControl.loescheKunden(cmbBxNummerHaus.getValue());
    	}
    	
    /** zeigt ein Fehlermeldungsfenster an

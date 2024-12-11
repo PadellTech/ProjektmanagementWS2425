@@ -14,6 +14,7 @@ public final class GrundrissControl {
 	// das View-Objekt des Grundriss-Fensters
 	private GrundrissView grundrissView;
 	private DBVerbindung connection;
+	private KundeModel kundeModel;
 
 	/**
 	 * erzeugt ein ControlObjekt inklusive View-Objekt und Model-Objekt zum 
@@ -25,6 +26,7 @@ public final class GrundrissControl {
     	stageGrundriss.initModality(Modality.APPLICATION_MODAL);
     	this.grundrissView = new GrundrissView(this, stageGrundriss);
     	this.connection = connection;
+    	this.kundeModel = kundeModel;
 	}
 	    
 	/**
@@ -42,4 +44,13 @@ public final class GrundrissControl {
 	public boolean pruefeKonstellationSonderwuensche(int[] ausgewaehlteSw){
 		return true;
 	}
+    public void speichereSonderwuensche(int[] sonderwunsch_id)
+    {
+    	try {
+    	connection.speichereSonderwuensche(sonderwunsch_id,kundeModel.getKunde().getHausnummer());
+    	} catch(Exception e)
+    	{
+    		this.grundrissView.Fehlermeldung("Es wurde kein Kunde ausgewaehlt");
+    	}
+    }
 }
