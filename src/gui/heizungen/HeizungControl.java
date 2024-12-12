@@ -4,6 +4,16 @@ import business.kunde.KundeModel;
 import business.dbVerbindung.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import business.kunde.KundeModel;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 /**
  * Klasse, welche das Fenster mit den Sonderwuenschen zu den Heizung-Varianten
@@ -152,5 +162,44 @@ public final class HeizungControl {
             dg = wunschSechs ? 3:2;
         }
         return keller + eg +og +dg;
+    }
+
+    public  static void exportiereHeizungSonderwuensche(int kundennummer) {
+        try {
+            // Abrufen des Nachnamens des Kunden
+        	DBVerbindung connection = DBVerbindung.getInstance();
+            String nachname = connection.getCustomerLastname(kundennummer);
+            if (nachname == null || nachname.isEmpty()) {
+                System.out.println("Kunde mit Kundennummer " + kundennummer + " nicht gefunden.");
+                return;
+            }
+
+            // Heizungswünsche für den Kunden abrufen
+            List<Map<String, Object>> heizungsWunschDaten = connection.getHeizungsWunschData(kundennummer);
+
+            // Dateiname erstellen
+            String dateiname = kundennummer + "_" + nachname + "_Heizungen.csv";
+
+            try (FileWriter writer = new FileWriter(dateiname)) {
+                // Header der CSV-Datei
+                writer.append("Sonderwunsch_Name,Wunschoption_Name,Preis\n");
+
+                // Daten schreiben
+                for (Map<String, Object> eintrag : heizungsWunschDaten) {
+                    writer.append(eintrag.get("Sonderwunsch_Name").toString())
+                          .append(",")
+                          .append(eintrag.get("Wunschoption_Name").toString())
+                          .append(",")
+                          .append(eintrag.get("Preis").toString())
+                          .append("\n");
+                }
+
+                System.out.println("Die Datei " + dateiname + " wurde erfolgreich exportiert.");
+            } catch (IOException e) {
+                System.out.println("Fehler beim Schreiben der Datei: " + e.getMessage());
+            }
+        } catch (SQLException e) {
+            System.out.println("Fehler beim Abrufen der Daten: " + e.getMessage());
+        }
     }
 }
