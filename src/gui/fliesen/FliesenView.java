@@ -157,7 +157,7 @@ public class FliesenView extends BasisView{
 
     @Override
     protected void csvExport() {
-
+    	this.fliesenControl.exportiereSonderwuensche("Fliesen");
     }
 }
 

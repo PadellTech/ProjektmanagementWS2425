@@ -126,7 +126,7 @@ public class FensterAussentuerView extends BasisView{
 
     @Override
     protected void csvExport() {
-
+    	this.fatControl.exportiereSonderwuensche("Fenster und Außentüren");
     }
 
     public void berechneUndZeigePreisSonderwuensche() {
@@ -172,6 +172,7 @@ public class FensterAussentuerView extends BasisView{
         preisFenster.showAndWait();
         System.out.println(gesamtpreis);
     }
+    
 }
 
 

@@ -232,4 +232,48 @@ public class DBVerbindung
         }
         return instance;
     }
+    
+    public String getCustomerLastname(int hausnummer) throws SQLException {
+        String query = "SELECT nachname FROM Kunde WHERE hausnummer = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, hausnummer);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("nachname");
+                }
+            }
+        }
+        return null;
+    }
+
+    public List<Map<String, Object>> getSonderwunschData(int hausnummer, String kategorie) throws SQLException {
+        String query = """
+            SELECT sw.name AS Sonderwunsch_Name, 
+                   wo.name AS Wunschoption_Name, 
+                   wo.preis AS Preis
+            FROM Wunschoption wo
+            JOIN Wunschoption_haus wh ON wo.wunschoption_id = wh.wunschoption_id
+            JOIN Haus h ON wh.hausnummer = h.hausnummer
+            JOIN Kunde k ON k.hausnummer = h.hausnummer
+            JOIN Sonderwunschkategorie sw ON wo.wunsch_id = sw.wunsch_id
+            WHERE k.hausnummer = ? AND sw.name = ?;
+        """;
+
+        List<Map<String, Object>> results = new ArrayList<>();
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, hausnummer);
+            stmt.setString(2, kategorie);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Map<String, Object> row = new HashMap<>();
+                    row.put("Sonderwunsch_Name", rs.getString("Sonderwunsch_Name"));
+                    row.put("Wunschoption_Name", rs.getString("Wunschoption_Name"));
+                    row.put("Preis", rs.getDouble("Preis"));
+                    results.add(row);
+                }
+            }
+        }
+        return results;
+    }
 }
