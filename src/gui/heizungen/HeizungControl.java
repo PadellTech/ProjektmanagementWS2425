@@ -1,6 +1,7 @@
 package gui.heizungen;
 
 import business.kunde.KundeModel;
+import gui.kunde.KundeView;
 import business.dbVerbindung.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -47,7 +48,7 @@ public final class HeizungControl {
     public void speichereSonderwuensche(int[] sonderwunsch_id)
     {
     	try {
-    	connection.speichereSonderwuensche(sonderwunsch_id,kundeModel.getKunde().getHausnummer());
+    	connection.speichereSonderwuensche(sonderwunsch_id,KundeView.getComboboxValue());
     	} catch(Exception e)
     	{
     		this.heizungView.Fehlermeldung("Es wurde kein Kunde ausgewaehlt");
@@ -101,7 +102,7 @@ public final class HeizungControl {
             if(kundeModel.getKunde() == null) {
                 return false;
             }
-            int[] grundrissSw = connection.executeSelectCustomerWishes(kundeModel.getKunde().getHausnummer(), 1);
+            int[] grundrissSw = connection.executeSelectCustomerWishes(KundeView.getComboboxValue(), 1);
             boolean grundrissWunschSechs = false;
             for (Integer current : grundrissSw) {
                 if (current == 6) {
@@ -137,7 +138,7 @@ public final class HeizungControl {
         if(kundeModel.getKunde() == null) {
             return 0;
         }
-        int[] grundrissSw = connection.executeSelectCustomerWishes(kundeModel.getKunde().getHausnummer(), 1);
+        int[] grundrissSw = connection.executeSelectCustomerWishes(KundeView.getComboboxValue(), 1);
 
         for(int current: grundrissSw){
             switch (current){
@@ -158,8 +159,9 @@ public final class HeizungControl {
         }
         return keller + eg +og +dg;
     }
-    public static void exportiereHeizungSonderwuensche(int kundennummer, String kategorie) {
-        try {
+    public void exportiereSonderwuensche(String kategorie) {
+    	int kundennummer = KundeView.getComboboxValue();
+    	try {
             // Abrufen des Nachnamens des Kunden
             DBVerbindung connection = DBVerbindung.getInstance();
             String nachname = connection.getCustomerLastname(kundennummer);

@@ -157,7 +157,7 @@ public class GrundrissView extends BasisView{
 
     @Override
     protected void csvExport() {
-
+    	this.grundrissControl.exportiereSonderwuensche("Grundriss-Varianten");
     }
 
 }

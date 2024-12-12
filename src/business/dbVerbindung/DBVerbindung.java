@@ -233,10 +233,10 @@ public class DBVerbindung
         return instance;
     }
     
-    public String getCustomerLastname(int kundennummer) throws SQLException {
-        String query = "SELECT nachname FROM Kunde WHERE kundennummer = ?";
+    public String getCustomerLastname(int hausnummer) throws SQLException {
+        String query = "SELECT nachname FROM Kunde WHERE hausnummer = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setInt(1, kundennummer);
+            stmt.setInt(1, hausnummer);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return rs.getString("nachname");
@@ -246,7 +246,7 @@ public class DBVerbindung
         return null;
     }
 
-    public List<Map<String, Object>> getSonderwunschData(int kundennummer, String kategorie) throws SQLException {
+    public List<Map<String, Object>> getSonderwunschData(int hausnummer, String kategorie) throws SQLException {
         String query = """
             SELECT sw.name AS Sonderwunsch_Name, 
                    wo.name AS Wunschoption_Name, 
@@ -256,12 +256,12 @@ public class DBVerbindung
             JOIN Haus h ON wh.hausnummer = h.hausnummer
             JOIN Kunde k ON k.hausnummer = h.hausnummer
             JOIN Sonderwunschkategorie sw ON wo.wunsch_id = sw.wunsch_id
-            WHERE k.kundennummer = ? AND sw.name = ?;
+            WHERE k.hausnummer = ? AND sw.name = ?;
         """;
 
         List<Map<String, Object>> results = new ArrayList<>();
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setInt(1, kundennummer);
+            stmt.setInt(1, hausnummer);
             stmt.setString(2, kategorie);
 
             try (ResultSet rs = stmt.executeQuery()) {

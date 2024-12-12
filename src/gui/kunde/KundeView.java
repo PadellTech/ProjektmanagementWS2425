@@ -25,7 +25,7 @@ public class KundeView{
 	private GridPane gridPane 			= new GridPane();
 	private Label lblKunde    	      	= new Label("Kunde");
     private Label lblNummerHaus     	= new Label("Plannummer des Hauses");
-    private ComboBox<Integer> 
+    static private ComboBox<Integer> 
         cmbBxNummerHaus                 = new ComboBox<Integer>();
     private Label lblVorname         	= new Label("Vorname");
     private TextField txtVorname     	= new TextField();
@@ -195,6 +195,10 @@ public class KundeView{
         alert.setHeaderText(ueberschrift);
         alert.setContentText(meldung);
         alert.show();
+    }
+    public static int getComboboxValue()
+    {
+    	return cmbBxNummerHaus.getValue();
     }
 
 }
