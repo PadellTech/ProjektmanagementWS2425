@@ -5,6 +5,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class DBVerbindung 
 {
@@ -142,5 +146,49 @@ public class DBVerbindung
             }
         }
         return instance;
+    }
+    
+    public String getCustomerLastname(int kundennummer) throws SQLException {
+        String query = "SELECT nachname FROM Kunde WHERE kundennummer = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, kundennummer);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("nachname");
+                }
+            }
+        }
+        return null;
+    }
+
+    public List<Map<String, Object>> getSonderwunschData(int kundennummer, String kategorie) throws SQLException {
+        String query = """
+            SELECT sw.name AS Sonderwunsch_Name, 
+                   wo.name AS Wunschoption_Name, 
+                   wo.preis AS Preis
+            FROM Wunschoption wo
+            JOIN Wunschoption_haus wh ON wo.wunschoption_id = wh.wunschoption_id
+            JOIN Haus h ON wh.hausnummer = h.hausnummer
+            JOIN Kunde k ON k.hausnummer = h.hausnummer
+            JOIN Sonderwunschkategorie sw ON wo.wunsch_id = sw.wunsch_id
+            WHERE k.kundennummer = ? AND sw.name = ?;
+        """;
+
+        List<Map<String, Object>> results = new ArrayList<>();
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, kundennummer);
+            stmt.setString(2, kategorie);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Map<String, Object> row = new HashMap<>();
+                    row.put("Sonderwunsch_Name", rs.getString("Sonderwunsch_Name"));
+                    row.put("Wunschoption_Name", rs.getString("Wunschoption_Name"));
+                    row.put("Preis", rs.getDouble("Preis"));
+                    results.add(row);
+                }
+            }
+        }
+        return results;
     }
 }
