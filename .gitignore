@@ -1,1 +1,5 @@
-/bin/
+/bin/,
+*.gitignore,
+*.project,
+*.class,
+*..settings/org.eclipse.jdt.core.prefs
