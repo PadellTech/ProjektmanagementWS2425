@@ -123,6 +123,12 @@ public class FensterAussentuerView extends BasisView{
         // Es wird erst die Methode pruefeKonstellationSonderwuensche(int[] ausgewaehlteSw)
         // aus dem Control aufgerufen, dann die Sonderwuensche gespeichert.
     }
+
+    @Override
+    protected void csvExport() {
+
+    }
+
     public void berechneUndZeigePreisSonderwuensche() {
         double gesamtpreis = 0.0;
 

@@ -154,7 +154,12 @@ public class GrundrissView extends BasisView{
         	System.out.println("Kombination ungueltig");
         }
     }
- 	
- }
+
+    @Override
+    protected void csvExport() {
+
+    }
+
+}
 
 

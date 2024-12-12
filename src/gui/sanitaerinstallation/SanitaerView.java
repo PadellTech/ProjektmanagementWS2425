@@ -154,6 +154,11 @@ public class SanitaerView extends BasisView{
         }
     }
 
+    @Override
+    protected void csvExport() {
+
+    }
+
 
 }
 
