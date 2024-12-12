@@ -154,6 +154,11 @@ public class FliesenView extends BasisView{
         }
 
     }
+
+    @Override
+    protected void csvExport() {
+
+    }
 }
 
 

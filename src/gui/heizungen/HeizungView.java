@@ -152,6 +152,11 @@ public class HeizungView extends BasisView{
         this.heizungControl.speichereSonderwuensche(ausgewaehlteSonderwuensche);
     }
 
+    @Override
+    protected void csvExport() {
+
+    }
+
 }
 
 
