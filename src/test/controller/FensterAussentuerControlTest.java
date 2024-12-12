@@ -1,10 +1,11 @@
-package test.gui;
+package test.controller;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import gui.fenster_aussentueren.FensterAussentuerControl;
+import gui.fliesen.FliesenControl;
 import gui.kunde.KundeControl;
 import javafx.stage.Stage;
 import business.dbVerbindung.DBVerbindung;
@@ -13,6 +14,14 @@ import business.kunde.KundeModel;
 
 class FensterAussentuerControlTest {
     private FensterAussentuerControl faController;
+	private KundeModel kundemodel;
+	private DBVerbindung db;
+	private Kunde kunde;
+	private int hausnummer;
+	private String vorname;
+	private String nachname;
+	private String telefonnummer;
+	private String email;
     private int[] ausgewaehlteSw_2;
     private int[] ausgewaehlteSw_7;
     private int[] ausgewaehlteSw_4_7;
@@ -23,10 +32,15 @@ class FensterAussentuerControlTest {
 
     @BeforeEach
     void setUp() throws Exception {
-    	DBVerbindung dbtool = new DBVerbindung();
-    	KundeModel kundeModel = KundeModel.getInstance();
-        faController = new FensterAussentuerControl(kundeModel, dbtool);
-
+    	kundemodel = KundeModel.getInstance();
+		db = DBVerbindung.getInstance();
+        faController = new FensterAussentuerControl(db, kundemodel);
+        hausnummer = 2; // Hat Dachgeschoss
+		vorname = "Max";
+		nachname = "Mustermann";
+        telefonnummer = "0987654321";
+        email = "Max.Mustermann@test.com";
+        kunde = new Kunde(hausnummer, vorname, nachname, telefonnummer, email);
         // Initialize the arrays
         ausgewaehlteSw_2 = new int[] {2};
         ausgewaehlteSw_7 = new int[] {7};
@@ -35,7 +49,7 @@ class FensterAussentuerControlTest {
         ausgewaehlteSw_5_8 = new int[] {5,8};
         ausgewaehlteSw_9 = new int[] {9};
         ausgewaehlteSw_6_9 = new int[] {6,9};
-        kundeModel.setKunde(new Kunde(1, "Test", "TestN", "123456", "test"));
+        kundemodel.setKunde(kunde);
     }
 
     @Test

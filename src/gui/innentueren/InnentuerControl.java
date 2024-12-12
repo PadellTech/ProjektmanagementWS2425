@@ -29,8 +29,9 @@ public final class InnentuerControl {
         this.connection = connection;
     }
     
-    public InnentuerControl() {
-    	
+    public InnentuerControl(DBVerbindung connection,KundeModel kundeModel ) {
+    	this.kundeModel = kundeModel;
+        this.connection = connection;
     }
     /**
      * macht das InnentuerView-Objekt sichtbar.

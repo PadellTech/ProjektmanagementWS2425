@@ -28,6 +28,10 @@ public final class FensterAussentuerControl {
         this.kundeModel = kundeModel;
         this.connection = connection;
     }
+    public FensterAussentuerControl(DBVerbindung connection,KundeModel kundeModel){
+        this.kundeModel = kundeModel;
+        this.connection = connection;
+    }
  
     /**
      * macht das FensterAussentuerView-Objekt sichtbar.
