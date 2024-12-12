@@ -220,6 +220,59 @@ public class DBVerbindung
         return nameToIdMap;
     }
 
+    public String getCustomerLastname(int kundennummer) throws SQLException {
+        String lastname = null;
+        String query = "SELECT nachname FROM Kunde WHERE kundennummer = ?";
+        
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, kundennummer);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    lastname = rs.getString("nachname");
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Fehler beim Abrufen des Nachnamens: " + e.getMessage());
+            throw e;
+        }
+        
+        return lastname;
+    }
+    
+
+    public List<Map<String, Object>> getHeizungsWunschData(int kundennummer) throws SQLException {
+        String query = """
+            SELECT sw.name AS Sonderwunsch_Name, 
+                   wo.name AS Wunschoption_Name, 
+                   wo.preis AS Preis
+            FROM Wunschoption wo
+            JOIN Wunschoption_haus wh ON wo.wunschoption_id = wh.wunschoption_id
+            JOIN Haus h ON wh.hausnummer = h.hausnummer
+            JOIN Kunde k ON k.hausnummer = h.hausnummer
+            JOIN Sonderwunschkategorie sw ON wo.wunsch_id = sw.wunsch_id
+            WHERE k.kundennummer = ? AND sw.name = 'Heizungen';
+        """;
+
+        List<Map<String, Object>> results = new ArrayList<>();
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, kundennummer);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Map<String, Object> row = new HashMap<>();
+                    row.put("Sonderwunsch_Name", rs.getString("Sonderwunsch_Name"));
+                    row.put("Wunschoption_Name", rs.getString("Wunschoption_Name"));
+                    row.put("Preis", rs.getDouble("Preis"));
+                    results.add(row);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Fehler beim Abrufen der Heizungswünsche: " + e.getMessage());
+            throw e;
+        }
+
+        return results;
+    }
 
 
     public static DBVerbindung getInstance() {
