@@ -1,14 +1,17 @@
 package gui.kunde;
 
 import business.kunde.*;
-
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.*;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
+import business.dbVerbindung.*;
 
 /**
  * Klasse, welche das Grundfenster mit den Kundendaten bereitstellt.
@@ -46,6 +49,10 @@ public class KundeView{
 	private MenuItem mnItmInnentuer		= new MenuItem("Innent�rvarianten");
 	private MenuItem mnItmHeizung		= new MenuItem("Heizungsvarianten");
 	private MenuItem mnItmFensterAussentuer		= new MenuItem("Fenster und Au�ent�r-varianten");
+	private DBVerbindung connection = new DBVerbindung();
+	
+    private TableView<String[]> tableView = new TableView<>();
+    private ObservableList<String[]> kundenDaten = FXCollections.observableArrayList();
 
 
 	//-------Ende Attribute der grafischen Oberflaeche-------
@@ -62,10 +69,11 @@ public class KundeView{
         this.kundeModel = kundeModel;
         
         primaryStage.setTitle(this.kundeModel.getUeberschrift());	
-	    Scene scene = new Scene(borderPane, 550, 400);
+	    Scene scene = new Scene(borderPane, 600, 570);
 	    primaryStage.setScene(scene);
         primaryStage.show();
-
+        
+        leseKundenAusDatenbank();
 	    this.initKomponenten();
 	    this.initListener();
     }
@@ -110,7 +118,14 @@ public class KundeView{
 		mnSonderwuensche.getItems().add(mnItmHeizung);
 		mnSonderwuensche.getItems().add(mnItmSanitaer);
 		mnSonderwuensche.getItems().add(mnItmFliesen);
+		
+		//Tabelle zur Anzeige der Kundendaten
+        tableView.setItems(kundenDaten);
+
+        borderPane.setBottom(tableView);
     }
+    
+    
 
     /* initialisiert die Listener zu den Steuerelementen auf de Maske */
     private void initListener(){
@@ -152,6 +167,32 @@ public class KundeView{
     
     private void leseKunden(){
     }
+    private void leseKundenAusDatenbank() {
+        String sql = "SELECT kundennummer, hausnummer, vorname, nachname, telefonnummer, email FROM Kunde";
+        String[] columns = {"kundennummer", "hausnummer", "vorname", "nachname", "telefonnummer", "email"};
+
+        try {
+            String[][] daten = connection.executeSelect(sql, columns);
+            kundenDaten.setAll(daten);
+
+            // Entferne vorhandene Spalten
+            tableView.getColumns().clear();
+
+            // Füge neue Spalten hinzu basierend auf den Spaltennamen
+            for (int i = 0; i < columns.length; i++) {
+                final int colIndex = i;
+                TableColumn<String[], String> column = new TableColumn<>(columns[i]);
+                column.setCellValueFactory(data -> {
+                    String[] row = data.getValue();
+                    return new javafx.beans.property.SimpleStringProperty(row[colIndex]);
+                });
+                tableView.getColumns().add(column);
+            }
+
+        } catch (Exception e) {
+            zeigeFehlermeldung("Fehler beim Laden der Kundendaten", e.getMessage());
+        }
+    }
     
     private void legeKundenAn(){
          Kunde kunde = new Kunde(cmbBxNummerHaus.getValue() ,txtVorname.getText(), txtNachname.getText(), txtNummer.getText(), txtEmail.getText());
@@ -160,6 +201,7 @@ public class KundeView{
 			 return;
 		 }
          kundeControl.speichereKunden(kunde);
+         leseKundenAusDatenbank();
    	}
     
   	private void aendereKunden(){
@@ -179,10 +221,12 @@ public class KundeView{
 
 		    // Rufe die Methode auf, die das SQL-Statement ausführt
 		    this.kundeControl.aendereKunden(sql);
+		    leseKundenAusDatenbank();
    	}
   	
    	private void loescheKunden(){
    		this.kundeControl.loescheKunden(cmbBxNummerHaus.getValue());
+   		leseKundenAusDatenbank();
    	}
    	
    /** zeigt ein Fehlermeldungsfenster an
