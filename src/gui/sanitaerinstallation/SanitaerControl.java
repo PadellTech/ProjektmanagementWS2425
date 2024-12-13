@@ -2,7 +2,15 @@ package gui.sanitaerinstallation;
 
 import business.kunde.Kunde;
 import business.kunde.KundeModel;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import business.dbVerbindung.*;
+import javafx.scene.control.Alert;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -38,6 +46,7 @@ public final class SanitaerControl {
         this.sanitaerView.oeffneSanitaerView();
     }
 
+    
     public String[][] leseSanitaerSonderwuensche(){
     	this.connection = DBVerbindung.getInstance();
     	return connection.executeSelectNameAndPrice("Wunschoption", 5);

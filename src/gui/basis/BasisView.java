@@ -1,5 +1,6 @@
 package gui.basis;
 
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -11,7 +12,7 @@ import javafx.stage.Stage;
  * Klasse, welche die Basis fuer die Fenster zu den Sonderwuenschen bereitstellt.
  */
 public abstract class BasisView {
- 
+	 
     //---Anfang Attribute der grafischen Oberflaeche---
 	Stage sonderwunschStage;
 	private BorderPane borderPane 		= new BorderPane();
@@ -86,5 +87,4 @@ public abstract class BasisView {
   	
  	
 }
-
 

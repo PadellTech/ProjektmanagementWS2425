@@ -75,6 +75,7 @@ public final class KundeModel {
 	 * speichert ein Kunde-Objekt in die Datenbank
 	 * @param kunde, Kunde-Objekt, welches zu speichern ist
 	 * @throws SQLException, Fehler beim Speichern in die Datenbank
+	 * 
 	 * @throws Exception, unbekannter Fehler
 	 */
 	public void speichereKunden(Kunde kunde, DBVerbindung connection)
