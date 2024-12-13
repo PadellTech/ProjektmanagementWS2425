@@ -42,7 +42,10 @@ public final class GrundrissControl {
 	public void oeffneGrundrissView(){ 
 		this.grundrissView.oeffneGrundrissView();
 	}
-
+    
+    public void zeigeBild(){
+        this.grundrissView.zeigeBild(kundeModel.hatDachgeschoss());
+    }
 	public String[][] leseGrundrissSonderwuensche(){
 		this.connection = DBVerbindung.getInstance();
 		return connection.executeSelectNameAndPrice("Wunschoption", 1);

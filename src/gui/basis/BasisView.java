@@ -81,6 +81,9 @@ public abstract class BasisView {
     protected GridPane getGridPaneSonderwunsch() {
   		return this.gridPane;
   	}
+	protected GridPane getGridPaneButtons(){
+		return this.gridPaneButtons;
+	}
 
   	protected Label getLblSonderwunsch() {
   		return lblSonderwunsch;
