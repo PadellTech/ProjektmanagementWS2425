@@ -30,6 +30,7 @@ public class SanitaerControlTest {
         sanitaerControl.exportiereSonderwuensche("Sanitärinstallation");
         FileReader fReader = new FileReader("1_Mustermann_sanitaer.csv");
         BufferedReader bufferedReader = new BufferedReader(fReader);
-        assertEquals("Sonderwunsch_Name,Wunschoption_Name,Preis", bufferedReader);
+        assertEquals("Sonderwunsch_Name,Wunschoption_Name,Preis", bufferedReader.readLine());
+        bufferedReader.close();
     }
 }
