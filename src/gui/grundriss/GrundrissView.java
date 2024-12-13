@@ -2,12 +2,18 @@ package gui.grundriss;
 
 import javax.sound.sampled.FloatControl;
 
+import business.dbVerbindung.DBVerbindung;
+import business.kunde.KundeModel;
 import gui.basis.BasisView;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 /**
  * Klasse, welche das Fenster mit den Sonderwuenschen zu 
@@ -155,9 +161,26 @@ public class GrundrissView extends BasisView{
         }
     }
 
+    /**Csv export**/
     @Override
-    protected void csvExport() {
+    protected void csvExport() throws IOException {
+        if(KundeModel.getInstance().getKunde() != null) {
+            String kNummer = String.valueOf(KundeModel.getInstance().getKunde().getHausnummer());
+            String nachname = KundeModel.getInstance().getKunde().getNachname();
 
+            BufferedWriter writer = new BufferedWriter(new FileWriter("" + kNummer + "_" + nachname + "_Grundriss.csv"));
+            String[] stri = DBVerbindung.getInstance().executeSelectCustomerWishesString(KundeModel.getInstance().getKunde().getHausnummer(), 1);
+            try {
+                for (String current : stri) {
+                    writer.write(current);
+                    writer.newLine();
+
+                }
+                writer.flush();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
 }

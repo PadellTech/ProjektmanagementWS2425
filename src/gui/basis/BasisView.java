@@ -10,6 +10,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import business.kunde.*;
 
+import java.io.IOException;
+
 /**
  * Klasse, welche die Basis fuer die Fenster zu den Sonderwuenschen bereitstellt.
  */
@@ -67,8 +69,12 @@ public abstract class BasisView {
     /* Es muessen die Listener implementiert werden. */
     protected void initListener(){
 		btnExport.setOnAction(aEvent ->{
-			csvExport();
-		});
+            try {
+                csvExport();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
        	btnBerechnen.setOnAction(aEvent -> {
     		berechneUndZeigePreisSonderwuensche();
      	});
@@ -123,7 +129,7 @@ public abstract class BasisView {
 	/**
 	 * Csv Export Methode
 	 */
-	protected abstract void csvExport();
+	protected abstract void csvExport() throws IOException;
 
 }
 

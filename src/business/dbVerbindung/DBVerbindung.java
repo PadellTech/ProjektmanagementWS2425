@@ -171,6 +171,36 @@ public class DBVerbindung
         return ids.stream().mapToInt(i -> i).toArray();
     }
 
+    public String[] executeSelectCustomerWishesString(int customerNumber, int wishCategory) {
+        // SQL query to fetch the names of Wunschoption
+        String sql = "SELECT w.name " +
+                "FROM Kunde k " +
+                "JOIN Haus h ON k.hausnummer = h.hausnummer " +
+                "JOIN Wunschoption_haus wh ON h.hausnummer = wh.hausnummer " +
+                "JOIN Wunschoption w ON wh.wunschoption_id = w.wunschoption_id " +
+                "WHERE k.kundennummer = ? AND w.wunsch_id = ?";
+
+        List<String> names = new ArrayList<>();
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            // Setting the parameters for the prepared statement
+            stmt.setInt(1, customerNumber);
+            stmt.setInt(2, wishCategory);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                // Loop through the result set and add each Wunschoption name to the list
+                while (rs.next()) {
+                    names.add(rs.getString("name"));
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Fehler beim Abrufen der Wunschoptionen: " + e.getMessage());
+        }
+
+        // Convert the list of names to a String array
+        return names.toArray(new String[0]);
+    }
+
     // Method to save the selected wishes in the database
     public void speichereSonderwuensche(int[] sonderwunsch_id, int hausnummer)
     {
