@@ -9,6 +9,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * Klasse, welche das Fenster mit den Sonderwuenschen zu
@@ -81,9 +86,9 @@ public class FensterAussentuerView extends BasisView{
         super.oeffneBasisView();
     }
 
-    private String[][] leseFensterAussentuerSonderwuensche(){
-        return this.fatControl.leseFensterAussentuerSonderwuensche();
-    }
+    
+
+    
     /* speichert die ausgesuchten Sonderwuensche in der Datenbank ab */
     protected void speichereSonderwuensche(){
         // Zählen der ausgewählten Checkboxen, um die Größe des Arrays festzulegen
@@ -125,8 +130,42 @@ public class FensterAussentuerView extends BasisView{
     }
 
     @Override
-    protected void csvExport() {
+	public void csvExport() {
+        // Kundeninformationen abrufen
+        int kundennummer = fatControl.getKundeModel().getKunde().getHausnummer(); // Beispiel für Abruf der Kundennummer
+        String nachname = fatControl.getKundeModel().getKunde().getNachname(); // Beispiel für Abruf des Nachnamens
 
+        // Dateiname für den Export erstellen
+        String dateiname = kundennummer + "_" + nachname + "_FensterUndAussentueren.csv";
+
+        // CSV-Datei erstellen
+        File file = new File(dateiname);
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            // Überschrift der CSV-Datei
+            writer.write("Bezeichnung,Sonderwunsch,Preis in Euro,Ausgewählt\n");
+
+            // Durchlaufen der Sonderwünsche und Schreiben in die CSV-Datei
+            for (int i = 0; i < sonderwuensche.length; i++) {
+                String bezeichnung = sonderwuensche[i][0]; // Name des Sonderwunsches
+                String preis = sonderwuensche[i][1]; // Preis des Sonderwunsches
+                String id = sonderwuensche[i][2]; // ID des Sonderwunsches
+
+                // Überprüfen, ob der Sonderwunsch ausgewählt wurde
+                boolean ausgewaehlt = chckBxPlatzhalter[i].isSelected();
+
+                // Daten in die CSV schreiben
+                writer.write(bezeichnung + "," + id + "," + preis + "," + (ausgewaehlt ? "Ja" : "Nein") + "\n");
+            }
+
+            // Erfolgreiche Speicherung bestätigen
+            System.out.println("CSV-Datei erfolgreich exportiert: " + dateiname);
+        } catch (IOException e) {
+            System.err.println("Fehler beim Exportieren der CSV-Datei: " + e.getMessage());
+        }
+    }
+
+    private String[][] leseFensterAussentuerSonderwuensche() {
+        return this.fatControl.leseFensterAussentuerSonderwuensche();
     }
 
     public void berechneUndZeigePreisSonderwuensche() {

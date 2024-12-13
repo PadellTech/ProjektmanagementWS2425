@@ -1,9 +1,18 @@
 package gui.fliesen;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.BufferedWriter;
+import java.util.ArrayList;
+import java.io.PrintWriter;
+
+import business.kunde.Kunde;
 import gui.basis.BasisView;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -155,10 +164,40 @@ public class FliesenView extends BasisView{
 
     }
 
-    @Override
     protected void csvExport() {
+    	  // Kundeninformationen abrufen
+        int kundennummer = fliesenControl.getKundeModel().getKunde().getHausnummer(); // Beispiel für Abruf der Kundennummer
+        String nachname = fliesenControl.getKundeModel().getKunde().getNachname(); // Beispiel für Abruf des Nachnamens
 
+        // Dateiname für den Export erstellen
+        String dateiname = kundennummer + "_" + nachname + "_fliesenSW.csv";
+
+        // CSV-Datei erstellen
+        File file = new File(dateiname);
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            // Überschrift der CSV-Datei
+            writer.write("Bezeichnung,Sonderwunsch,Preis in Euro,Ausgewählt\n");
+
+            // Durchlaufen der Sonderwünsche und Schreiben in die CSV-Datei
+            for (int i = 0; i < sonderwuensche.length; i++) {
+                String bezeichnung = sonderwuensche[i][0]; // Name des Sonderwunsches
+                String preis = sonderwuensche[i][1]; // Preis des Sonderwunsches
+                String id = sonderwuensche[i][2]; // ID des Sonderwunsches
+
+                // Überprüfen, ob der Sonderwunsch ausgewählt wurde
+                boolean ausgewaehlt = chckBxPlatzhalter[i].isSelected();
+
+                // Daten in die CSV schreiben
+                writer.write(bezeichnung + "," + id + "," + preis + "," + (ausgewaehlt ? "Ja" : "Nein") + "\n");
+            }
+
+            // Erfolgreiche Speicherung bestätigen
+            System.out.println("CSV-Datei erfolgreich exportiert: " + dateiname);
+        } catch (IOException e) {
+            System.err.println("Fehler beim Exportieren der CSV-Datei: " + e.getMessage());
+        }
     }
+
 }
 
 

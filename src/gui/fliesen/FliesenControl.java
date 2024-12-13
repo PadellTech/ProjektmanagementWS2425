@@ -112,4 +112,8 @@ public final class FliesenControl {
         }
         return true;
     }
+    
+    public KundeModel getKundeModel() {
+        return this.kundeModel;
+    }
 }
