@@ -38,7 +38,11 @@ public final class SanitaerControl {
         this.kundeModel = kundeModel;
         this.connection = connection;
     }
-
+    
+    public SanitaerControl(DBVerbindung connection, KundeModel kundeModel) {
+    	this.kundeModel = kundeModel;
+        this.connection = connection;
+    }
     /**
      * macht das SanitaerView-Objekt sichtbar.
      */

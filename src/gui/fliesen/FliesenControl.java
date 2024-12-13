@@ -35,6 +35,13 @@ public final class FliesenControl {
         this.kundeModel = kundeModel;
         this.connection = connection;
     }
+    
+    public FliesenControl(DBVerbindung connection,KundeModel kundeModel){
+       
+        this.kundeModel = kundeModel;
+        this.connection = connection;
+    }
+    
     public void speichereSonderwuensche(int[] sonderwunsch_id)
     {
     	try {

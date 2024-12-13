@@ -1,4 +1,4 @@
-package test.gui;
+package test.controller;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,12 +7,20 @@ import org.junit.jupiter.api.Test;
 import business.dbVerbindung.DBVerbindung;
 import business.kunde.Kunde;
 import business.kunde.KundeModel;
+import gui.fliesen.FliesenControl;
 import gui.innentueren.InnentuerControl;
 
 class InnentuerControlTest {
 
-    private InnentuerControl innentuerControl;
-    private KundeModel kundeModel;
+	private InnentuerControl innentuerenController;
+	private KundeModel kundemodel;
+	private DBVerbindung db;
+	private Kunde kunde;
+	private int hausnummer;
+	private String vorname;
+	private String nachname;
+	private String telefonnummer;
+	private String email;
     private int[] ausgewaehlteSw_1;
     private int[] ausgewaehlteSw_2;
     private int[] ausgewaehlteSw_1_2;
@@ -20,19 +28,25 @@ class InnentuerControlTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        DBVerbindung dbtool = new DBVerbindung();
-        kundeModel = KundeModel.getInstance();
-        innentuerControl = new InnentuerControl(kundeModel, dbtool);
-
-        // Initialize the arrays
+    	kundemodel = KundeModel.getInstance();
+		db = DBVerbindung.getInstance();
+		
+		hausnummer = 2; // Hat Dachgeschoss
+		vorname = "Max";
+		nachname = "Mustermann";
+        telefonnummer = "0987654321";
+        email = "Max.Mustermann@test.com";
+        kunde = new Kunde(hausnummer, vorname, nachname, telefonnummer, email);
+        kundemodel.setKunde(kunde);
+        innentuerenController = new InnentuerControl(db,kundemodel);
+        
         ausgewaehlteSw_1 = new int[] {1};
         ausgewaehlteSw_2 = new int[] {2};
-        ausgewaehlteSw_1_2 = new int[] {1, 2};
+        ausgewaehlteSw_1_2 = new int[] {1,2};
         ausgewaehlteSw_3 = new int[] {3};
-
-        // Set Kunde with hausnummer to control hatDachgeschoss()
-        // hausnummer != 1,6,7,14,15,24 => hatDachgeschoss() returns true
-        kundeModel.setKunde(new Kunde(2, "Test", "TestN", "123456", "test@test.com"));
+//        fliesencontroller = new FliesenControl(db);
+        // Annahme grundriss Option 6 wurde gewählt
+        
     }
 
     @Test
@@ -41,7 +55,7 @@ class InnentuerControlTest {
         int z = 2;
         int[] ausgewaehlteSw = ausgewaehlteSw_1; // {1}
 
-        boolean result = innentuerControl.pruefeKonstellationSonderwuensche(ausgewaehlteSw, y, z);
+        boolean result = innentuerenController.pruefeKonstellationSonderwuensche(ausgewaehlteSw, y, z);
         assertTrue(result, "Valid Sonderwünsche mit hatDachgeschoss true sollten gültig sein.");
     }
 
@@ -51,7 +65,7 @@ class InnentuerControlTest {
         int z = 3; // y + z = 8, x wird in getDoors() berechnet und ist 7
         int[] ausgewaehlteSw = ausgewaehlteSw_1;
 
-        boolean result = innentuerControl.pruefeKonstellationSonderwuensche(ausgewaehlteSw, y, z);
+        boolean result = innentuerenController.pruefeKonstellationSonderwuensche(ausgewaehlteSw, y, z);
         assertFalse(result, "Wenn y + z > x, sollte die Kombination ungültig sein.");
     }
 
@@ -61,20 +75,18 @@ class InnentuerControlTest {
         int z = 2;
         int[] ausgewaehlteSw = ausgewaehlteSw_3; // {3}
 
-        boolean result = innentuerControl.pruefeKonstellationSonderwuensche(ausgewaehlteSw, y, z);
+        boolean result = innentuerenController.pruefeKonstellationSonderwuensche(ausgewaehlteSw, y, z);
         assertTrue(result, "Wunsch 3 ausgewählt und hatDachgeschoss true sollte gültig sein.");
     }
 
     @Test
     void testInvalidSonderwuenscheWithWunschDreiAndNoHatDachgeschoss() {
         // Ändern von hausnummer auf 1, sodass hatDachgeschoss() false zurückgibt
-        kundeModel.setKunde(new Kunde(1, "Test", "TestN", "123456", "test@test.com"));
-
         int y = 2;
         int z = 2;
         int[] ausgewaehlteSw = ausgewaehlteSw_3; // {3}
 
-        boolean result = innentuerControl.pruefeKonstellationSonderwuensche(ausgewaehlteSw, y, z);
+        boolean result = innentuerenController.pruefeKonstellationSonderwuensche(ausgewaehlteSw, y, z);
         assertFalse(result, "Wunsch 3 ausgewählt und hatDachgeschoss false sollte ungültig sein.");
     }
 
@@ -84,7 +96,7 @@ class InnentuerControlTest {
         int z = 0;
         int[] ausgewaehlteSw = ausgewaehlteSw_1;
 
-        boolean result = innentuerControl.pruefeKonstellationSonderwuensche(ausgewaehlteSw, y, z);
+        boolean result = innentuerenController.pruefeKonstellationSonderwuensche(ausgewaehlteSw, y, z);
         assertFalse(result, "Wenn y > x, sollte die Kombination ungültig sein.");
     }
 
@@ -94,7 +106,7 @@ class InnentuerControlTest {
         int z = 8; // z > x (x = 7 in getDoors())
         int[] ausgewaehlteSw = ausgewaehlteSw_1;
 
-        boolean result = innentuerControl.pruefeKonstellationSonderwuensche(ausgewaehlteSw, y, z);
+        boolean result = innentuerenController.pruefeKonstellationSonderwuensche(ausgewaehlteSw, y, z);
         assertFalse(result, "Wenn z > x, sollte die Kombination ungültig sein.");
     }
 
@@ -104,7 +116,7 @@ class InnentuerControlTest {
         int z = 3; // y + z = x (x = 7)
         int[] ausgewaehlteSw = ausgewaehlteSw_1_2;
 
-        boolean result = innentuerControl.pruefeKonstellationSonderwuensche(ausgewaehlteSw, y, z);
+        boolean result = innentuerenController.pruefeKonstellationSonderwuensche(ausgewaehlteSw, y, z);
         assertTrue(result, "Wenn y + z = x, sollte die Kombination gültig sein.");
     }
 
@@ -114,7 +126,7 @@ class InnentuerControlTest {
         int z = 2;
         int[] ausgewaehlteSw = ausgewaehlteSw_1;
 
-        boolean result = innentuerControl.pruefeKonstellationSonderwuensche(ausgewaehlteSw, y, z);
+        boolean result = innentuerenController.pruefeKonstellationSonderwuensche(ausgewaehlteSw, y, z);
         assertFalse(result, "Negative y-Werte sollten ungültig sein.");
     }
 
@@ -124,7 +136,7 @@ class InnentuerControlTest {
         int z = -1;
         int[] ausgewaehlteSw = ausgewaehlteSw_1;
 
-        boolean result = innentuerControl.pruefeKonstellationSonderwuensche(ausgewaehlteSw, y, z);
+        boolean result = innentuerenController.pruefeKonstellationSonderwuensche(ausgewaehlteSw, y, z);
         assertFalse(result, "Negative z-Werte sollten ungültig sein.");
     }
 
@@ -134,7 +146,7 @@ class InnentuerControlTest {
         int z = 0;
         int[] ausgewaehlteSw = ausgewaehlteSw_1;
 
-        boolean result = innentuerControl.pruefeKonstellationSonderwuensche(ausgewaehlteSw, y, z);
+        boolean result = innentuerenController.pruefeKonstellationSonderwuensche(ausgewaehlteSw, y, z);
         assertTrue(result, "Wenn y und z Null sind, sollte die Kombination gültig sein.");
     }
 }
