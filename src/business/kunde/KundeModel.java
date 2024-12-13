@@ -82,7 +82,7 @@ public final class KundeModel {
 	    throws SQLException, Exception{
      
    	    this.kunde = kunde;
-   	    // Speicherung des Kunden in der DB
+   	    // Speicherung des Kunden in der Datenbank
    	    if(this.validateUser(kunde)) {
    	    	connection.executeUpdate(
    	    		    "INSERT INTO Kunde (kundennummer, hausnummer, vorname, nachname, telefonnummer, email) " +
