@@ -39,7 +39,6 @@ public class HeizungenControlTest {
 
     @BeforeEach
 	public void setUp() throws Exception{
-        System.out.println("Hallo##############################################");
         dbtool = new DBVerbindung();
     	kundeModel = KundeModel.getInstance();
         heizungenControl = new HeizungControl(kundeModel, dbtool);
