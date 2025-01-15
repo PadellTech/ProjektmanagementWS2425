@@ -197,6 +197,32 @@ public class DBVerbindung
         this.executeUpdate(sql.toString());
     }
 
+    // Method to delete the selected wishes in the database
+    public void loescheSonderwuensche(int[] sonderwunsch_id, int hausnummer)
+    {
+        // Überprüfen, ob das Array leer ist
+        if (sonderwunsch_id == null || sonderwunsch_id.length == 0) {
+            System.out.println("Keine Sonderwünsche übergeben.");
+            return;
+        }
+        
+        // Erstelle den dynamischen SQL-String
+        StringBuilder sql = new StringBuilder("DELETE FROM Wunschoption_haus WHERE ");
+        
+        // Füge für jede Wunschoption eine Zeile hinzu
+        for (int i = 0; i < sonderwunsch_id.length; i++) {
+            sql.append("wunschoption_id=").append(sonderwunsch_id[i]);
+            if (i < sonderwunsch_id.length - 1) {
+                sql.append(" OR "); // Komma nur zwischen den Werten, nicht am Ende
+            }
+        }
+        sql.append(" AND hausnummer=").append(hausnummer).append(";"); // Beende das SQL-Statement mit einem Semikolon
+        
+        // Debug-Ausgabe des generierten SQL-Strings
+        System.out.println("Generiertes SQL: " + sql.toString());
+        this.executeUpdate(sql.toString());
+    }
+
     /**
      * This method retrieves a map of the names of the wishes to their corresponding wunschoption_ids
      */

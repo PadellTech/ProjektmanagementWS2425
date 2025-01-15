@@ -51,6 +51,7 @@ public final class FensterAussentuerControl {
     public void berechnePreis() {
     	
     }
+
     public void speichereSonderwuensche(int[] sonderwunsch_id)
     {
     	try {
@@ -58,6 +59,15 @@ public final class FensterAussentuerControl {
     	} catch(Exception e)
     	{
     		this.fatView.Fehlermeldung("Es wurde kein Kunde ausgewaehlt");
+    	}
+    }
+
+    public void loescheSonderwuensche(int[] sonderwunsch_id)
+    {
+    	try {
+    	    connection.loescheSonderwuensche(sonderwunsch_id,KundeView.getComboboxValue());
+    	} catch(Exception e) {
+    		this.fatView.Fehlermeldung("Fehler beim speichern des loeschens der Sonderwuensche");
     	}
     }
 
