@@ -1,4 +1,9 @@
 package gui.fliesen;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import business.dbVerbindung.*;
 import business.kunde.Kunde;
 import business.kunde.KundeModel;
@@ -15,7 +20,7 @@ public final class FliesenControl {
     private FliesenView fliesenView;
     private KundeModel kundeModel;
     private DBVerbindung connection;
-
+    public String[][] sonderwuensche;
     /**
      * erzeugt ein ControlObjekt inklusive View-Objekt und Model-Objekt zum
      * Fenster fuer die Sonderwuensche zum Fliesen.
@@ -116,4 +121,30 @@ public final class FliesenControl {
     public KundeModel getKundeModel() {
         return this.kundeModel;
     }
+    
+    
+    public void deleteFliesen(int kundennummer) {
+        try {
+            DBVerbindung connection = DBVerbindung.getInstance();
+
+            // SQL-Query zum Löschen der FLiesen varianten-Sonderwünsche
+            String sql = "DELETE FROM Wunschoption_haus " +
+                         "WHERE hausnummer IN (SELECT hausnummer FROM Haus WHERE kundennummer = ?) " +
+                         "AND wunschoption_id IN (SELECT wunschoption_id FROM Wunschoption WHERE wunsch_id IN " +
+                         "(SELECT wunsch_id FROM Sonderwunschkategorie WHERE name = 'Fliesen'))";
+
+            connection.executePreparedUpdate(sql, kundennummer);
+             
+            System.out.println("Alle Fliesen-Varianten Sonderwünsche für Kundennummer " + kundennummer + " wurden erfolgreich gelöscht.");
+        } catch (Exception e) {
+            System.out.println("Fehler beim Löschen der Fliesen-Varianten Sonderwünsche: " + e.getMessage());
+        }
+    }
+    
+
+
+  
+   
+
 }
+

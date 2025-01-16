@@ -164,7 +164,16 @@ public class FliesenView extends BasisView{
 
     }
 
-    protected void csvExport() {
+    
+    public int getCheckBoxForSonderwunsch(int index) {
+        if (index >= 0 && index < chckBxPlatzhalter.length) {
+            return chckBxPlatzhalter[index].isSelected() ? 1 : 0;
+        }
+        return 0;
+    }
+    
+    
+    public void csvExport() {
     	  // Kundeninformationen abrufen
         int kundennummer = fliesenControl.getKundeModel().getKunde().getHausnummer(); // Beispiel für Abruf der Kundennummer
         String nachname = fliesenControl.getKundeModel().getKunde().getNachname(); // Beispiel für Abruf des Nachnamens
