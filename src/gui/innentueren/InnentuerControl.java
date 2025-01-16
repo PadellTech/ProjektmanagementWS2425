@@ -193,4 +193,21 @@ public final class InnentuerControl {
             System.out.println("Fehler beim Abrufen der Daten: " + e.getMessage());
         }
     }
+    public void deleteInnentueren(int kundennummer) {
+        try {
+            DBVerbindung connection = DBVerbindung.getInstance();
+
+            // SQL-Query zum Löschen der Sanitaervarianten-Sonderwünsche
+            String sql = "DELETE FROM Wunschoption_haus " +
+                    "WHERE hausnummer IN (SELECT hausnummer FROM Haus WHERE kundennummer = ?) " +
+                    "AND wunschoption_id IN (SELECT wunschoption_id FROM Wunschoption WHERE wunsch_id IN " +
+                    "(SELECT wunsch_id FROM Sonderwunschkategorie WHERE name = 'Innentueren'))";
+
+            connection.executePreparedUpdate(sql, kundennummer);
+
+            System.out.println("Alle Innentueren-Sonderwünsche für Kundennummer " + kundennummer + " wurden erfolgreich gelöscht.");
+        } catch (Exception e) {
+            System.out.println("Fehler beim Löschen der Innentueren-Sonderwünsche: " + e.getMessage());
+        }
+    }
 }
