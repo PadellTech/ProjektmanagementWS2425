@@ -145,4 +145,22 @@ public final class SanitaerControl {
             System.out.println("Fehler beim Abrufen der Daten: " + e.getMessage());
         }
     }
+    
+    public void deleteSanitaervarianten(int kundennummer) {
+        try {
+            DBVerbindung connection = DBVerbindung.getInstance();
+
+            // SQL-Query zum Löschen der Sanitaervarianten-Sonderwünsche
+            String sql = "DELETE FROM Wunschoption_haus " +
+                         "WHERE hausnummer IN (SELECT hausnummer FROM Haus WHERE kundennummer = ?) " +
+                         "AND wunschoption_id IN (SELECT wunschoption_id FROM Wunschoption WHERE wunsch_id IN " +
+                         "(SELECT wunsch_id FROM Sonderwunschkategorie WHERE name = 'Sanitärinstallation'))";
+
+            connection.executePreparedUpdate(sql, kundennummer);
+
+            System.out.println("Alle Sanitaervarianten-Sonderwünsche für Kundennummer " + kundennummer + " wurden erfolgreich gelöscht.");
+        } catch (Exception e) {
+            System.out.println("Fehler beim Löschen der Sanitaervarianten-Sonderwünsche: " + e.getMessage());
+        }
+    }
 }
