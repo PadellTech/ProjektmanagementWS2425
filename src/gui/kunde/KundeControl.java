@@ -55,7 +55,6 @@ public class KundeControl {
     	this.grundrissControl.oeffneGrundrissView();
     }
 
-
 	public void oeffneSanitaerControl(){
 		if (this.sanitaerControl == null){
 			this.sanitaerControl = new SanitaerControl(kundeModel, connection);

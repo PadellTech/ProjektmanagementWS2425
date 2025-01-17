@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import business.dbVerbindung.DBVerbindung;
 import javafx.collections.*;
+import java.util.Random;
   
 /** 
  * Klasse, welche das Model des Grundfensters mit den Kundendaten enthaelt.
@@ -15,6 +16,7 @@ public final class KundeModel {
 	
 	// enthaelt den aktuellen Kunden
 	private Kunde kunde;
+	Random random = new Random();
 	
 	/* enthaelt die Plannummern der Haeuser, diese muessen vielleicht noch
 	   in eine andere Klasse verschoben werden */
@@ -89,7 +91,7 @@ public final class KundeModel {
    	    if(this.validateUser(kunde)) {
    	    	connection.executeUpdate(
    	    		    "INSERT INTO Kunde (kundennummer, hausnummer, vorname, nachname, telefonnummer, email) " +
-   	    		    "VALUES (2, " + this.kunde.getHausnummer() + ", '" + this.kunde.getVorname() + "', '" + 
+   	    		    "VALUES ("+random.nextInt(65000)+", " + this.kunde.getHausnummer() + ", '" + this.kunde.getVorname() + "', '" + 
    	    		    this.kunde.getNachname() + "', '" + this.kunde.getTelefonnummer() + "', '" + 
    	    		    this.kunde.getEmail() + "');"
    	    		);
@@ -137,9 +139,10 @@ public final class KundeModel {
 	public void setKunde(Kunde k) {
 		this.kunde = k;
 	}
-	
-	
 
-	 
-	 
+
+	public int getHausnummmer() {
+		return this.kunde.getHausnummer();
+	}
+
 }

@@ -197,6 +197,32 @@ public class DBVerbindung
         this.executeUpdate(sql.toString());
     }
 
+    // Method to delete the selected wishes in the database
+    public void loescheSonderwuensche(int[] sonderwunsch_id, int hausnummer)
+    {
+        // Überprüfen, ob das Array leer ist
+        if (sonderwunsch_id == null || sonderwunsch_id.length == 0) {
+            System.out.println("Keine Sonderwünsche übergeben.");
+            return;
+        }
+        
+        // Erstelle den dynamischen SQL-String
+        StringBuilder sql = new StringBuilder("DELETE FROM Wunschoption_haus WHERE ");
+        
+        // Füge für jede Wunschoption eine Zeile hinzu
+        for (int i = 0; i < sonderwunsch_id.length; i++) {
+            sql.append("wunschoption_id=").append(sonderwunsch_id[i]);
+            if (i < sonderwunsch_id.length - 1) {
+                sql.append(" OR "); // Komma nur zwischen den Werten, nicht am Ende
+            }
+        }
+        sql.append(" AND hausnummer=").append(hausnummer).append(";"); // Beende das SQL-Statement mit einem Semikolon
+        
+        // Debug-Ausgabe des generierten SQL-Strings
+        System.out.println("Generiertes SQL: " + sql.toString());
+        this.executeUpdate(sql.toString());
+    }
+
     /**
      * This method retrieves a map of the names of the wishes to their corresponding wunschoption_ids
      */
@@ -233,10 +259,10 @@ public class DBVerbindung
         return instance;
     }
     
-    public String getCustomerLastname(int kundennummer) throws SQLException {
-        String query = "SELECT nachname FROM Kunde WHERE kundennummer = ?";
+    public String getCustomerLastname(int hausnummer) throws SQLException {
+        String query = "SELECT nachname FROM Kunde WHERE hausnummer = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setInt(1, kundennummer);
+            stmt.setInt(1, hausnummer);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return rs.getString("nachname");
@@ -246,7 +272,7 @@ public class DBVerbindung
         return null;
     }
 
-    public List<Map<String, Object>> getSonderwunschData(int kundennummer, String kategorie) throws SQLException {
+    public List<Map<String, Object>> getSonderwunschData(int hausnummer, String kategorie) throws SQLException {
         String query = """
             SELECT sw.name AS Sonderwunsch_Name, 
                    wo.name AS Wunschoption_Name, 
@@ -256,12 +282,12 @@ public class DBVerbindung
             JOIN Haus h ON wh.hausnummer = h.hausnummer
             JOIN Kunde k ON k.hausnummer = h.hausnummer
             JOIN Sonderwunschkategorie sw ON wo.wunsch_id = sw.wunsch_id
-            WHERE k.kundennummer = ? AND sw.name = ?;
+            WHERE k.hausnummer = ? AND sw.name = ?;
         """;
 
         List<Map<String, Object>> results = new ArrayList<>();
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setInt(1, kundennummer);
+            stmt.setInt(1, hausnummer);
             stmt.setString(2, kategorie);
 
             try (ResultSet rs = stmt.executeQuery()) {

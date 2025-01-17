@@ -9,6 +9,7 @@ import javafx.scene.text.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import business.kunde.*;
+import gui.kunde.KundeView;
 
 /**
  * Klasse, welche die Basis fuer die Fenster zu den Sonderwuenschen bereitstellt.
@@ -80,6 +81,9 @@ public abstract class BasisView {
     protected GridPane getGridPaneSonderwunsch() {
   		return this.gridPane;
   	}
+	protected GridPane getGridPaneButtons(){
+		return this.gridPaneButtons;
+	}
 
   	protected Label getLblSonderwunsch() {
   		return lblSonderwunsch;

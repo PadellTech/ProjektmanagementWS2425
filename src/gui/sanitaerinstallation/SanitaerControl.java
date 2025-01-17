@@ -2,6 +2,7 @@ package gui.sanitaerinstallation;
 
 import business.kunde.Kunde;
 import business.kunde.KundeModel;
+import gui.kunde.KundeView;
 
 import java.io.FileWriter;
 import java.util.List;
@@ -52,7 +53,7 @@ public final class SanitaerControl {
     public void speichereSonderwuensche(int[] sonderwunsch_id)
     {
     	try {
-    	connection.speichereSonderwuensche(sonderwunsch_id,kundeModel.getKunde().getHausnummer());
+    	connection.speichereSonderwuensche(sonderwunsch_id,KundeView.getComboboxValue());
     	} catch(Exception e)
     	{
     		this.sanitaerView.Fehlermeldung("Es wurde kein Kunde ausgewaehlt");
@@ -100,8 +101,9 @@ public final class SanitaerControl {
         return true;
     }
     
-    public static void exportiereSanitaerSonderwuensche(int kundennummer, String kategorie) {
-        try {
+    public void exportiereSonderwuensche(String kategorie) {
+        int kundennummer = KundeView.getComboboxValue();
+    	try {
             // Abrufen des Nachnamens des Kunden
             DBVerbindung connection = DBVerbindung.getInstance();
             String nachname = connection.getCustomerLastname(kundennummer);
