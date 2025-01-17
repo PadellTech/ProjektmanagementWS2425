@@ -152,6 +152,7 @@ public class HeizungView extends BasisView{
             }
         }
 
+        
         // Speichern der ausgewählten Sonderwünsche
         this.heizungControl.speichereSonderwuensche(ausgewaehlteSonderwuensche);
         // Löschen der nicht ausgewählten Sonderwünsche
