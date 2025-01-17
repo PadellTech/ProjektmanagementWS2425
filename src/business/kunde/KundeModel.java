@@ -1,6 +1,9 @@
 package business.kunde;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import business.dbVerbindung.DBVerbindung;
 import javafx.collections.*;
@@ -37,8 +40,9 @@ public final class KundeModel {
 				kunde.getHausnummer() != 15 && kunde.getHausnummer() != 24;
 	}
 	
+	
 	// privater Konstruktor zur Realisierung des Singleton-Pattern
-	private KundeModel(){
+	public KundeModel(){
 		super();
 	}
 	
@@ -99,6 +103,10 @@ public final class KundeModel {
    	    }
 	}
 
+	
+	 public void deleteKunde(Kunde kunde, DBVerbindung db){
+	        db.executeUpdate("DELETE FROM `kunde` WHERE `kundennummer` = ?");
+	    }
 	/**
 	 * Validates the given User.
 	 *
@@ -122,6 +130,9 @@ public final class KundeModel {
 		}
 		return true;
 	}
+	
+
+	
 	public Kunde getKunde() {
 		return kunde;
   }
@@ -129,7 +140,9 @@ public final class KundeModel {
 		this.kunde = k;
 	}
 
+
 	public int getHausnummmer() {
 		return this.kunde.getHausnummer();
 	}
+
 }

@@ -9,6 +9,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * Klasse, welche das Fenster mit den Sonderwuenschen zu
@@ -81,9 +86,9 @@ public class FensterAussentuerView extends BasisView{
         super.oeffneBasisView();
     }
 
-    private String[][] leseFensterAussentuerSonderwuensche(){
-        return this.fatControl.leseFensterAussentuerSonderwuensche();
-    }
+    
+
+    
     /* speichert die ausgesuchten Sonderwuensche in der Datenbank ab */
     protected void speichereSonderwuensche(){
         // Zählen der ausgewählten Checkboxen, um die Größe des Arrays festzulegen
@@ -137,10 +142,10 @@ public class FensterAussentuerView extends BasisView{
         // aus dem Control aufgerufen, dann die Sonderwuensche gespeichert.
     }
 
-    @Override
+ 
     protected void csvExport() {
     	this.fatControl.exportiereSonderwuensche("Fenster und Außentüren");
-    }
+
 
     public void berechneUndZeigePreisSonderwuensche() {
         double gesamtpreis = 0.0;

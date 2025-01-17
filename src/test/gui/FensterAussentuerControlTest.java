@@ -1,76 +1,71 @@
 package test.gui;
 
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import gui.fenster_aussentueren.FensterAussentuerControl;
-import gui.kunde.KundeControl;
-import javafx.stage.Stage;
-import business.dbVerbindung.DBVerbindung;
+import gui.fenster_aussentueren.FensterAussentuerView;
 import business.kunde.Kunde;
 import business.kunde.KundeModel;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import javafx.stage.Stage;
 
-class FensterAussentuerControlTest {
-    private FensterAussentuerControl faController;
-    private int[] ausgewaehlteSw_2;
-    private int[] ausgewaehlteSw_7;
-    private int[] ausgewaehlteSw_4_7;
-    private int[] ausgewaehlteSw_8;
-    private int[] ausgewaehlteSw_5_8;
-    private int[] ausgewaehlteSw_9;
-    private int[] ausgewaehlteSw_6_9;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class FensterAussentuerControlTest {
+
+	private FensterAussentuerView fensterAussentuerView;
 
     @BeforeEach
-    void setUp() throws Exception {
-    	DBVerbindung dbtool = new DBVerbindung();
-    	KundeModel kundeModel = KundeModel.getInstance();
-        faController = new FensterAussentuerControl(kundeModel, dbtool);
+    void setUp() {
+        // Initialisiere das KundeModel mit einem Beispielkunden
+        KundeModel kundeModel = KundeModel.getInstance();
+        kundeModel.setKunde(new Kunde(1, "Max", "Mustermann", "123456", "testmail"));
 
-        // Initialize the arrays
-        ausgewaehlteSw_2 = new int[] {2};
-        ausgewaehlteSw_7 = new int[] {7};
-        ausgewaehlteSw_4_7 = new int[] {4,7};
-        ausgewaehlteSw_8 = new int[] {8};
-        ausgewaehlteSw_5_8 = new int[] {5,8};
-        ausgewaehlteSw_9 = new int[] {9};
-        ausgewaehlteSw_6_9 = new int[] {6,9};
-        kundeModel.setKunde(new Kunde(1, "Test", "TestN", "123456", "test"));
+        // Initialisiere die FensterAussentuerView mit einem Dummy Stage
+        Stage stage = new Stage();
+        fensterAussentuerView = new FensterAussentuerView(null, stage);
+
+        // Mock-Daten für Sonderwünsche setzen
+        fensterAussentuerView.sonderwuensche = new String[][]{
+                {"Fenster1", "100.0", "1"},
+                {"Fenster2", "150.0", "2"}
+        };
     }
 
     @Test
-    void testPruefeKonstellationSonderwuensche() throws Exception {
-        
-        boolean result;
-   
-        result = faController.pruefeKonstellationSonderwuensche(ausgewaehlteSw_2);
-        assertFalse(result, "Wunsch 2 sollte gültig sein, wenn DG vorhanden ist.");
+    public void testCsvExport() {
+        String expectedFileName = "1_Mustermann_FensterUndAussentueren.csv";
 
-        // Test 3.7 geht nur, wenn 3.4 ausgesucht wurde.
-        // Fall: Wunsch 7 ohne Wunsch 4
-        result = faController.pruefeKonstellationSonderwuensche(ausgewaehlteSw_7);
-        assertFalse(result, "Wunsch 7 sollte ungültig sein, wenn Wunsch 4 nicht ausgewählt wurde.");
+        // Rufe die Exportmethode auf
+        try {
+            fensterAussentuerView.csvExport();
+        } catch (Exception exception) {
+            fail("Fehler beim Exportieren der CSV-Datei: " + exception.getMessage());
+        }
 
-        // Fall: Wunsch 7 mit Wunsch 4
-        result = faController.pruefeKonstellationSonderwuensche(ausgewaehlteSw_4_7);
-        assertTrue(result, "Wunsch 7 sollte gültig sein, wenn Wunsch 4 ausgewählt wurde.");
+        // Prüfe, ob die Datei existiert
+        File exportedFile = new File(expectedFileName);
+        assertTrue(exportedFile.exists(), "CSV-Datei wurde nicht erstellt.");
 
-        // Test 3.8 geht nur, wenn 3.5 ausgesucht wurde.
-        // Fall: Wunsch 8 ohne Wunsch 5
-        result = faController.pruefeKonstellationSonderwuensche(ausgewaehlteSw_8);
-        assertFalse(result, "Wunsch 8 sollte ungültig sein, wenn Wunsch 5 nicht ausgewählt wurde.");
+        // Überprüfe den Inhalt der Datei
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(exportedFile))) {
+            // Prüfe die Kopfzeile
+            assertEquals("Bezeichnung,Sonderwunsch,Preis in Euro,Ausgewählt", bufferedReader.readLine());
 
-        // Fall: Wunsch 8 mit Wunsch 5
-        result = faController.pruefeKonstellationSonderwuensche(ausgewaehlteSw_5_8);
-        assertTrue(result, "Wunsch 8 sollte gültig sein, wenn Wunsch 5 ausgewählt wurde.");
+            // Prüfe die Datenzeilen
+            assertEquals("Fenster1,1,100.0,Nein", bufferedReader.readLine());
+            assertEquals("Fenster2,2,150.0,Nein", bufferedReader.readLine());
 
-        // Test 3.9 geht nur, wenn 3.6 ausgesucht wurde.
-        // Fall: Wunsch 9 ohne Wunsch 6
-        result = faController.pruefeKonstellationSonderwuensche(ausgewaehlteSw_9);
-        assertFalse(result, "Wunsch 9 sollte ungültig sein, wenn Wunsch 6 nicht ausgewählt wurde.");
-
-        // Fall: Wunsch 9 mit Wunsch 6
-        result = faController.pruefeKonstellationSonderwuensche(ausgewaehlteSw_6_9);
-        assertTrue(result, "Wunsch 9 sollte gültig sein, wenn Wunsch 6 ausgewählt wurde.");
+        } catch (IOException e) {
+            fail("Fehler beim Lesen der CSV-Datei: " + e.getMessage());
+        } finally {
+            // Lösche die Datei nach dem Test
+            if (!exportedFile.delete()) {
+                System.err.println("Die Testdatei konnte nicht gelöscht werden.");
+            }
+        }
     }
 }

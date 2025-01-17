@@ -48,6 +48,7 @@ public final class FensterAussentuerControl {
     	this.connection = DBVerbindung.getInstance();
     	return connection.executeSelectNameAndPrice("Wunschoption", 2);
     }
+    
     public void berechnePreis() {
     	
     }
@@ -62,6 +63,7 @@ public final class FensterAussentuerControl {
     	}
     }
 
+ 
     public void loescheSonderwuensche(int[] sonderwunsch_id)
     {
     	try {
@@ -113,6 +115,7 @@ public final class FensterAussentuerControl {
         }
         return true;
     }
+ 
     public void exportiereSonderwuensche(String kategorie) {
     	int kundennummer = KundeView.getComboboxValue();
     	try {
@@ -157,4 +160,5 @@ public final class FensterAussentuerControl {
             System.out.println("Fehler beim Abrufen der Daten: " + e.getMessage());
         }
     }
+
 }
