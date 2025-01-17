@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 public final class FliesenControl {
 
     // das View-Objekt des Fliesen-Fensters
+    private String fehlermeldung = "";
     private FliesenView fliesenView;
     private KundeModel kundeModel;
     private DBVerbindung connection;
@@ -94,9 +95,6 @@ public final class FliesenControl {
                     break;
             }
         }
-        if(kundeModel.getKunde() == null){
-            return false;
-        }
         int[] grundrissSw = connection.executeSelectCustomerWishes(KundeView.getComboboxValue(), 1);
         boolean grundrissWunschSechs = false;
         for (Integer current : grundrissSw) {
@@ -106,18 +104,29 @@ public final class FliesenControl {
             }
         }
         if(wunschDrei && wunschEins){
+            fehlermeldung = "Die Kombination von 7.1) Keine Fliesen im Küchenbereich des EG und " +
+                    "7.3) Mehrpreis bei großformatige Fliesen im + Küchenbereich des EG ist nicht möglich.";
             return false;
         }
         if(wunschVier && wunschZwei){
+            fehlermeldung = "Die Kombination von 7.2) Keine Fliesen im Bad des OG und " +
+                    "7.4) Mehrpreis bei großformatige Fliesen im Bad des OG ist nicht möglich.";
             return false;
         }
         if(wunschFuenf && (!hatDachgeschoss || !grundrissWunschSechs)){
+            fehlermeldung = "Die Sonderwunsch 7.5) Fliesen im Bad des DG ist nur möglich wenn das Haus ein Dachgeschoss hat" +
+                    "und 2.6) Ausführung eines Bades im DG ausgewählt wurde.";
             return false;
         }
         if(wunschSechs && !wunschFuenf){
+            fehlermeldung = "Der Sonderwunsch 7.6) Mehrpreis bei großformatige Fliesen im Bad des DG ist nur möglich wenn" +
+                    "7.5) Fliesen im Bad des DG ausgewählt wurde.";
             return false;
         }
         return true;
+    }
+    public String getFehlermeldung(){
+        return this.fehlermeldung;
     }
     public void exportiereSonderwuensche(String kategorie) {
     	int kundennummer = KundeView.getComboboxValue();

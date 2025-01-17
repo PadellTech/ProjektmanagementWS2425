@@ -147,10 +147,13 @@ public class FliesenView extends BasisView{
             }
         }
         if (fliesenControl.pruefeKonstellationSonderwuensche(ausgewaehlteSonderwuensche)) {
+            System.out.println(fliesenControl.pruefeKonstellationSonderwuensche((ausgewaehlteSonderwuensche)));
             this.fliesenControl.speichereSonderwuensche(ausgewaehlteSonderwuensche);
         }
         else {
-        	System.out.println("Kombination ungueltig");
+
+        	//System.out.println("Kombination ungueltig");
+            Fehlermeldung(fliesenControl.getFehlermeldung());
         }
 
     }
@@ -159,6 +162,8 @@ public class FliesenView extends BasisView{
     protected void csvExport() {
     	this.fliesenControl.exportiereSonderwuensche("Fliesen");
     }
+
+
 }
 
 
