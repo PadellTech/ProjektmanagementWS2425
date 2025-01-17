@@ -55,6 +55,15 @@ public final class HeizungControl {
     	}
     }
 
+    public void loescheSonderwuensche(int[] sonderwunsch_id) {
+        try {
+            connection.loescheSonderwuensche(sonderwunsch_id, KundeView.getComboboxValue());
+        } catch (Exception e) {
+            this.heizungView.Fehlermeldung("Fehler beim Löschen der Sonderwünsche.");
+        }
+    }
+    
+    
     /**
      * Validiert die Sonderwünsche zu Heizkoerpern
      *

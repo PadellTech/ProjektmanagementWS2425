@@ -121,8 +121,9 @@ public class HeizungView extends BasisView{
         System.out.println(gesamtpreis);
     }
 
-    /* speichert die ausgesuchten Sonderwuensche in der Datenbank ab */
-    protected void speichereSonderwuensche(){
+    // speichert die ausgesuchten Sonderwuensche in der Datenbank ab
+    // und löscht die nicht mehr ausgesucht 
+    protected void speichereSonderwuensche() {
         // Zählen der ausgewählten Checkboxen, um die Größe des Arrays festzulegen
         int count = 0;
         for (CheckBox checkBox : chckBxPlatzhalter) {
@@ -133,25 +134,31 @@ public class HeizungView extends BasisView{
 
         // Erstellen eines Arrays der richtigen Größe
         int[] ausgewaehlteSonderwuensche = new int[count];
-        int index = 0;
+        int[] abgewaehlteSonderwuensche = new int[chckBxPlatzhalter.length - count];
+        int indexSelection = 0;
+        int indexDeselection = 0;
 
         // Hinzufügen der IDs der ausgewählten Sonderwünsche in das Array
         for (int i = 0; i < chckBxPlatzhalter.length; i++) {
-            if (chckBxPlatzhalter[i].isSelected()) {
-                try {
-                    // Die Sonderwunsch-ID wird aus dem zweidimensionalen Array `sonderwuensche` gelesen
-                    int sonderwunschId = Integer.parseInt(sonderwuensche[i][2]); // Annahme: Spalte 2 enthält die ID
-                    ausgewaehlteSonderwuensche[index] = sonderwunschId;
-                    index++;
-                } catch (NumberFormatException e) {
-                    // Falls eine ungültige ID vorhanden ist, wird sie ignoriert
-                    System.err.println("Ungültige ID für Sonderwunsch an Position " + i + ": " + sonderwuensche[i][2]);
+            try {
+                int sonderwunschId = Integer.parseInt(sonderwuensche[i][2]); // Annahme: Spalte 2 enthält die ID
+                if (chckBxPlatzhalter[i].isSelected()) {
+                    ausgewaehlteSonderwuensche[indexSelection++] = sonderwunschId;
+                } else {
+                    abgewaehlteSonderwuensche[indexDeselection++] = sonderwunschId;
                 }
+            } catch (NumberFormatException e) {
+                System.err.println("Ungültige ID für Sonderwunsch an Position " + i + ": " + sonderwuensche[i][2]);
             }
         }
-        this.heizungControl.speichereSonderwuensche(ausgewaehlteSonderwuensche);
-    }
 
+        // Speichern der ausgewählten Sonderwünsche
+        this.heizungControl.speichereSonderwuensche(ausgewaehlteSonderwuensche);
+        // Löschen der nicht ausgewählten Sonderwünsche
+        this.heizungControl.loescheSonderwuensche(abgewaehlteSonderwuensche);
+    }
+ 
+    
     @Override
     protected void csvExport() {
     	this.heizungControl.exportiereSonderwuensche("Heizungen");
