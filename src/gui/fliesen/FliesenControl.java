@@ -163,4 +163,12 @@ public final class FliesenControl {
             System.out.println("Fehler beim Abrufen der Daten: " + e.getMessage());
         }
     }
+    public void loescheSonderwuensche(int[] sonderwunsch_id)
+    {
+    	try {
+    	    connection.loescheSonderwuensche(sonderwunsch_id,KundeView.getComboboxValue());
+    	} catch(Exception e) {
+    		this.fliesenView.Fehlermeldung("Fehler beim speichern des loeschens der Sonderwuensche");
+    	}
+    }
 }

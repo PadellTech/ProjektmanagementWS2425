@@ -130,7 +130,9 @@ public class FliesenView extends BasisView{
 
         // Erstellen eines Arrays der richtigen Größe
         int[] ausgewaehlteSonderwuensche = new int[count];
-        int index = 0;
+        int[] abgewaehlteSonderwuensche = new int[chckBxPlatzhalter.length - count];
+        int indexSelection = 0;
+        int indexDeselection = 0;
 
         // Hinzufügen der IDs der ausgewählten Sonderwünsche in das Array
         for (int i = 0; i < chckBxPlatzhalter.length; i++) {
@@ -138,8 +140,18 @@ public class FliesenView extends BasisView{
                 try {
                     // Die Sonderwunsch-ID wird aus dem zweidimensionalen Array `sonderwuensche` gelesen
                     int sonderwunschId = Integer.parseInt(sonderwuensche[i][2]); // Annahme: Spalte 2 enthält die ID
-                    ausgewaehlteSonderwuensche[index] = sonderwunschId;
-                    index++;
+                    ausgewaehlteSonderwuensche[indexSelection] = sonderwunschId;
+                    indexSelection++;
+                } catch (NumberFormatException e) {
+                    // Falls eine ungültige ID vorhanden ist, wird sie ignoriert
+                    System.err.println("Ungültige ID für Sonderwunsch an Position " + i + ": " + sonderwuensche[i][2]);
+                }
+            } else {
+                try {
+                    // Die Sonderwunsch-ID wird aus dem zweidimensionalen Array `sonderwuensche` gelesen
+                    int sonderwunschId = Integer.parseInt(sonderwuensche[i][2]); // Annahme: Spalte 2 enthält die ID
+                    abgewaehlteSonderwuensche[indexDeselection] = sonderwunschId;
+                    indexDeselection++;
                 } catch (NumberFormatException e) {
                     // Falls eine ungültige ID vorhanden ist, wird sie ignoriert
                     System.err.println("Ungültige ID für Sonderwunsch an Position " + i + ": " + sonderwuensche[i][2]);
@@ -147,6 +159,7 @@ public class FliesenView extends BasisView{
             }
         }
         if (fliesenControl.pruefeKonstellationSonderwuensche(ausgewaehlteSonderwuensche)) {
+        	this.fliesenControl.loescheSonderwuensche(abgewaehlteSonderwuensche);
             this.fliesenControl.speichereSonderwuensche(ausgewaehlteSonderwuensche);
         }
         else {

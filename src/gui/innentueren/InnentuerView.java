@@ -134,7 +134,9 @@ public class InnentuerView extends BasisView{
 
         // Erstellen eines Arrays der richtigen Größe
         int[] ausgewaehlteSonderwuensche = new int[count];
-        int index = 0;
+        int[] abgewaehlteSonderwuensche = new int[chckBxPlatzhalter.length - count];
+        int indexSelection = 0;
+        int indexDeselection = 0;
 
         // Hinzufügen der IDs der ausgewählten Sonderwünsche in das Array
         for (int i = 0; i < chckBxPlatzhalter.length; i++) {
@@ -142,16 +144,27 @@ public class InnentuerView extends BasisView{
                 try {
                     // Die Sonderwunsch-ID wird aus dem zweidimensionalen Array `sonderwuensche` gelesen
                     int sonderwunschId = Integer.parseInt(sonderwuensche[i][2]); // Annahme: Spalte 2 enthält die ID
-                    ausgewaehlteSonderwuensche[index] = sonderwunschId;
-                    index++;
+                    ausgewaehlteSonderwuensche[indexSelection] = sonderwunschId;
+                    indexSelection++;
+                } catch (NumberFormatException e) {
+                    // Falls eine ungültige ID vorhanden ist, wird sie ignoriert
+                    System.err.println("Ungültige ID für Sonderwunsch an Position " + i + ": " + sonderwuensche[i][2]);
+                }
+            } else {
+                try {
+                    // Die Sonderwunsch-ID wird aus dem zweidimensionalen Array `sonderwuensche` gelesen
+                    int sonderwunschId = Integer.parseInt(sonderwuensche[i][2]); // Annahme: Spalte 2 enthält die ID
+                    abgewaehlteSonderwuensche[indexDeselection] = sonderwunschId;
+                    indexDeselection++;
                 } catch (NumberFormatException e) {
                     // Falls eine ungültige ID vorhanden ist, wird sie ignoriert
                     System.err.println("Ungültige ID für Sonderwunsch an Position " + i + ": " + sonderwuensche[i][2]);
                 }
             }
         }
-        if (innentuerControl.pruefeKonstellationSonderwuensche(ausgewaehlteSonderwuensche, index, index)) { //To Do, Argumente anpassen
-            this.innentuerControl.speichereSonderwuensche(ausgewaehlteSonderwuensche);
+        if (innentuerControl.pruefeKonstellationSonderwuensche(ausgewaehlteSonderwuensche, count, count)) { //To Do, Argumente anpassen
+        	this.innentuerControl.loescheSonderwuensche(abgewaehlteSonderwuensche);
+        	this.innentuerControl.speichereSonderwuensche(ausgewaehlteSonderwuensche);
         }
         else {
         	System.out.println("Kombination ungueltig");

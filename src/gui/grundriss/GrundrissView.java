@@ -8,9 +8,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.Screen;
-import javafx.scene.image.*;
-
 
 /**
  * Klasse, welche das Fenster mit den Sonderwuenschen zu 
@@ -47,14 +44,6 @@ public class GrundrissView extends BasisView{
     protected void initKomponenten() {
         super.initKomponenten();
         super.getLblSonderwunsch().setText("Grundriss-Varianten");
-        
-        //FÜgt Knopf zum Anzeigen der Bilder hinzu
-        Button btnBildAnzeigen = new Button("Bild");
-        btnBildAnzeigen.setMinSize(25, 25);
-        btnBildAnzeigen.setOnAction(e->{
-            grundrissControl.zeigeBild();
-        });
-        getGridPaneButtons().add(btnBildAnzeigen,4,0);
 
         // Initialisieren der Arrays mit den entsprechenden Elementen
         for (int i = 0; i < 6; i++) {
@@ -80,26 +69,7 @@ public class GrundrissView extends BasisView{
 	public void oeffneGrundrissView(){ 
 		super.oeffneBasisView();
 	}
-    public void zeigeBild(Boolean hatDach){
-        Stage bildStage = new Stage();
-        bildStage.setTitle("Bild");
-        
-        ImageView iView;
-        if(hatDach){
-            iView = new ImageView("/gui/grundriss/img/Dachgeschoss.png");
-        }else{
-            iView = new ImageView("/gui/grundriss/img/OhneDachgeschoss.png");
-        }
-        iView.setFitHeight(Screen.getPrimary().getBounds().getHeight() * 0.9);
-        iView.preserveRatioProperty().set(true);
-        
-        VBox vb = new VBox(iView);
-        Scene bscene = new Scene(vb);
-        
-        bildStage.setScene(bscene);
-        bildStage.setResizable(false);
-        bildStage.show();
-    }
+    
     private String[][] leseGrundrissSonderwuensche(){
     	return this.grundrissControl.leseGrundrissSonderwuensche();
     }
@@ -153,6 +123,9 @@ public class GrundrissView extends BasisView{
     protected void speichereSonderwuensche(){
         // Zählen der ausgewählten Checkboxen, um die Größe des Arrays festzulegen
         int count = 0;
+        int[] abgewaehlteSonderwuensche = new int[chckBxPlatzhalter.length - count];
+        int indexSelection = 0;
+        int indexDeselection = 0;
         for (CheckBox checkBox : chckBxPlatzhalter) {
             if (checkBox.isSelected()) {
                 count++;
@@ -169,8 +142,18 @@ public class GrundrissView extends BasisView{
                 try {
                     // Die Sonderwunsch-ID wird aus dem zweidimensionalen Array `sonderwuensche` gelesen
                     int sonderwunschId = Integer.parseInt(sonderwuensche[i][2]); // Annahme: Spalte 2 enthält die ID
-                    ausgewaehlteSonderwuensche[index] = sonderwunschId;
-                    index++;
+                    ausgewaehlteSonderwuensche[indexSelection] = sonderwunschId;
+                    indexSelection++;
+                } catch (NumberFormatException e) {
+                    // Falls eine ungültige ID vorhanden ist, wird sie ignoriert
+                    System.err.println("Ungültige ID für Sonderwunsch an Position " + i + ": " + sonderwuensche[i][2]);
+                }
+            } else {
+                try {
+                    // Die Sonderwunsch-ID wird aus dem zweidimensionalen Array `sonderwuensche` gelesen
+                    int sonderwunschId = Integer.parseInt(sonderwuensche[i][2]); // Annahme: Spalte 2 enthält die ID
+                    abgewaehlteSonderwuensche[indexDeselection] = sonderwunschId;
+                    indexDeselection++;
                 } catch (NumberFormatException e) {
                     // Falls eine ungültige ID vorhanden ist, wird sie ignoriert
                     System.err.println("Ungültige ID für Sonderwunsch an Position " + i + ": " + sonderwuensche[i][2]);
@@ -178,7 +161,8 @@ public class GrundrissView extends BasisView{
             }
         }
         if (grundrissControl.pruefeKonstellationSonderwuensche(ausgewaehlteSonderwuensche)) {
-            this.grundrissControl.speichereSonderwuensche(ausgewaehlteSonderwuensche);
+        	this.grundrissControl.loescheSonderwuensche(abgewaehlteSonderwuensche);
+        	this.grundrissControl.speichereSonderwuensche(ausgewaehlteSonderwuensche);
         }
         else {
         	System.out.println("Kombination ungueltig");

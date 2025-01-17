@@ -118,5 +118,9 @@ public class KundeControl {
     public void aendereKunden(String sql) {
     	this.connection.executeUpdate(sql);
     }
+    public void aktualisiereKunde(int hausnummer)
+    {
+    	//this.kundeModel.getKunde().setHausnummer(hausnummer);
+    }
 
 }

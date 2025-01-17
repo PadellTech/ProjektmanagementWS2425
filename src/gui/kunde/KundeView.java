@@ -162,7 +162,7 @@ public class KundeView{
 		});
     }
     
-    private void holeInfoDachgeschoss(){ 
+    private void holeInfoDachgeschoss(){
     }
     
     private void leseKunden(){
@@ -242,6 +242,7 @@ public class KundeView{
     }
     public static int getComboboxValue()
     {
+    	
     	return cmbBxNummerHaus.getValue();
     }
 

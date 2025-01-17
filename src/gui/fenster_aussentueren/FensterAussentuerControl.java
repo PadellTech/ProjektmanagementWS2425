@@ -51,7 +51,6 @@ public final class FensterAussentuerControl {
     public void berechnePreis() {
     	
     }
-
     public void speichereSonderwuensche(int[] sonderwunsch_id)
     {
     	try {
@@ -61,7 +60,7 @@ public final class FensterAussentuerControl {
     		this.fatView.Fehlermeldung("Es wurde kein Kunde ausgewaehlt");
     	}
     }
-
+    
     public void loescheSonderwuensche(int[] sonderwunsch_id)
     {
     	try {

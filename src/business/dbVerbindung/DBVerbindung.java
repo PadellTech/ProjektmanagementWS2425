@@ -196,7 +196,6 @@ public class DBVerbindung
         System.out.println("Generiertes SQL: " + sql.toString());
         this.executeUpdate(sql.toString());
     }
-
     // Method to delete the selected wishes in the database
     public void loescheSonderwuensche(int[] sonderwunsch_id, int hausnummer)
     {
@@ -205,10 +204,10 @@ public class DBVerbindung
             System.out.println("Keine Sonderwünsche übergeben.");
             return;
         }
-        
+
         // Erstelle den dynamischen SQL-String
         StringBuilder sql = new StringBuilder("DELETE FROM Wunschoption_haus WHERE ");
-        
+
         // Füge für jede Wunschoption eine Zeile hinzu
         for (int i = 0; i < sonderwunsch_id.length; i++) {
             sql.append("wunschoption_id=").append(sonderwunsch_id[i]);
@@ -217,7 +216,7 @@ public class DBVerbindung
             }
         }
         sql.append(" AND hausnummer=").append(hausnummer).append(";"); // Beende das SQL-Statement mit einem Semikolon
-        
+
         // Debug-Ausgabe des generierten SQL-Strings
         System.out.println("Generiertes SQL: " + sql.toString());
         this.executeUpdate(sql.toString());

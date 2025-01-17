@@ -125,6 +125,9 @@ public class HeizungView extends BasisView{
     protected void speichereSonderwuensche(){
         // Zählen der ausgewählten Checkboxen, um die Größe des Arrays festzulegen
         int count = 0;
+        int[] abgewaehlteSonderwuensche = new int[chckBxPlatzhalter.length - count];
+        int indexSelection = 0;
+        int indexDeselection = 0;
         for (CheckBox checkBox : chckBxPlatzhalter) {
             if (checkBox.isSelected()) {
                 count++;
@@ -141,14 +144,25 @@ public class HeizungView extends BasisView{
                 try {
                     // Die Sonderwunsch-ID wird aus dem zweidimensionalen Array `sonderwuensche` gelesen
                     int sonderwunschId = Integer.parseInt(sonderwuensche[i][2]); // Annahme: Spalte 2 enthält die ID
-                    ausgewaehlteSonderwuensche[index] = sonderwunschId;
-                    index++;
+                    ausgewaehlteSonderwuensche[indexSelection] = sonderwunschId;
+                    indexSelection++;
+                } catch (NumberFormatException e) {
+                    // Falls eine ungültige ID vorhanden ist, wird sie ignoriert
+                    System.err.println("Ungültige ID für Sonderwunsch an Position " + i + ": " + sonderwuensche[i][2]);
+                }
+            } else {
+                try {
+                    // Die Sonderwunsch-ID wird aus dem zweidimensionalen Array `sonderwuensche` gelesen
+                    int sonderwunschId = Integer.parseInt(sonderwuensche[i][2]); // Annahme: Spalte 2 enthält die ID
+                    abgewaehlteSonderwuensche[indexDeselection] = sonderwunschId;
+                    indexDeselection++;
                 } catch (NumberFormatException e) {
                     // Falls eine ungültige ID vorhanden ist, wird sie ignoriert
                     System.err.println("Ungültige ID für Sonderwunsch an Position " + i + ": " + sonderwuensche[i][2]);
                 }
             }
         }
+        this.heizungControl.loescheSonderwuensche(abgewaehlteSonderwuensche);
         this.heizungControl.speichereSonderwuensche(ausgewaehlteSonderwuensche);
     }
 
